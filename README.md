@@ -1,1 +1,6 @@
 # IN200_Projet_Cryptographie
+Participants :
+- CHIROL GASPARD
+- HENRIQUE-SAMBA DANIELLI
+- MBENAR AMINATA
+- TREILHOU REMY
