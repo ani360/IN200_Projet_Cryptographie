@@ -215,11 +215,11 @@ def Calcul_IC(input : str, alphabet : str, pas : int) -> int : #calcul de l'indi
 txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
 encoded = (vigenere(txt).encode('AMELIE'))
 decoded = (vigenere(encoded.upper()).decrypt(0.065, 'francais'))
-#print(encoded)
+print(encoded)
 print(decoded)
 
 #test césar :
-encoded = (caesar(txt).encode(5))
+"""encoded = (caesar(txt).encode(5))
 decoded = (caesar(encoded).decode_freq('francais'))
 print(encoded)
-print(decoded)
+print(decoded)"""
