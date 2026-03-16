@@ -205,5 +205,3 @@ txt = "Le but de ce projet est de programmer des algorithmes de chiffrements uti
 #print(generate_vigenere_encode_table('english'))
 encoded = vigenere_encode(txt, 'DEGAULLE', "french")
 print(vigenere_decrypt(encoded, 'french'))
-
-#joijefoijzefoij
