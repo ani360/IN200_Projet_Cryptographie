@@ -190,7 +190,8 @@ def vigenere_decode(input : str, key : str, lang : str) -> str:
 def vigenere_decrypt(input : int, lang : str) -> str:
     alphabet : str = LangDictJson[lang]["alphabet"]
     L : int = len(alphabet)
-    plaintext : str = ''.join(char for char in input.upper() if char.isalpha())
+    plaintext : str = sanitize(input)
+    plaintext = ''.join(char for char in plaintext if char.isalpha())
     pas = 1
     while Calcul_IC(plaintext, alphabet, pas) < 0.065 :
         pas+=1
