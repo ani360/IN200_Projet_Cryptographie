@@ -32,32 +32,36 @@ def save_config(data, path, filename="enigma_config.json"):
     print(f"Configuration successfully saved to {filename}")
 
 class rotor:
-    def __init__(self,input, lang, number):
+    def __init__(self,forward_map, lang):
         self.alphabet : str = LangDictJson[lang]['alphabet']
         self.input : str = input
-        self.forward_map : str = EnigmaConfigDict['rotors'][f"Custom Rotor {number}"]
-        self.reverse_map : str = ''
         self.pos : int = 0
         self.L : int = len(self.alphabet)
-        self.turn : int = self.pos%(len(self.alphabet)-1)
-    
+        self.forward_map : str = forward_map
+        rev_list = [None] * self.L
+        for i, char in enumerate(self.forward_map):
+            target_index = self.alphabet.index(char)
+            rev_list[target_index] = self.alphabet[i]
+        self.reverse_map: str = "".join(rev_list)
+
     def step(self):
         # This actuates the state automatically
         self.pos = (self.pos + 1) % self.L
         return self.pos == 0
     
-    def shift(self, char : str, reverse : bool):
-        #index + offset
-        idx = (self.alphabet.index(char) + self.pos)%self.L
+    def shift(self, char: str, reverse: bool):
+        # 1. Entry Index + Position
+        idx = (self.alphabet.index(char) + self.pos) % self.L
 
-        #scramble
-        if not reverse :
-            idx = self.forward_map[idx]
-        else :
-            idx = self.reverse_map[idx]
+        # 2. Substitution (Scramble)
+        if not reverse:
+            char_out = self.forward_map[idx]
+        else:
+            char_out = self.reverse_map[idx]
         
-        #index - offset
-        return(self.alphabet[(idx - self.pos)%self.L])
+        # 3. FIX: Convert result back to index to perform subtraction
+        new_idx = self.alphabet.index(char_out)
+        return self.alphabet[(new_idx - self.pos) % self.L]
 
 class Reflector:
     def __init__(self, wiring_str, lang):
@@ -81,6 +85,52 @@ class Plugboard:
 
     def swap(self, char):
         return self.mapping.get(char, char)
+
+class EnigmaMachine:
+    def __init__(self, lang):
+        self.alphabet : str = LangDictJson[lang]['alphabet']
+        self.plugboard : list[list[str]] = Plugboard(EnigmaConfigDict['cables'], lang)
+        self.rotors = [rotor(r['wiring'], lang) for r in EnigmaConfigDict['rotors']]
+        self.reflector = Reflector(EnigmaConfigDict['reflector'], lang)
+
+    def process_text(self, text : str):
+        result : str = ""
+        for char in text.upper():
+            if char not in self.alphabet:
+                result += char
+                continue
+            
+            # --- STEP 1: ACTUATION (The Odometer) ---
+            # Every keypress moves the first rotor.
+            if self.rotors[0].step():
+                if self.rotors[1].step():
+                    self.rotors[2].step()
+
+            # --- STEP 2: FORWARD PASS ---
+            # Signal enters via Plugboard
+            current_char = self.plugboard.swap(char)
+            
+            # Signal goes through rotors (R1 -> R2 -> R3)
+            for r in self.rotors:
+                current_char = r.shift(current_char, reverse=False)
+
+            # --- STEP 3: REFLECTION ---
+            # Signal hits the "Mirror"
+            current_char = self.reflector.reflect(current_char)
+
+            # --- STEP 4: BACKWARD PASS ---
+            # Signal goes back through rotors (R3 -> R2 -> R1)
+            for r in reversed(self.rotors):
+                current_char = r.shift(current_char, reverse=True)
+
+            # --- STEP 5: FINAL PLUGBOARD ---
+            # Signal exits via Plugboard to the Lampboard
+            current_char = self.plugboard.swap(current_char)
+            
+            result += current_char
+            
+        return result
+
 
 def setup_generator(nrotor : int, ncables : int, lang) : #n = rotor number
     alphabet : str = LangDictJson[lang]['alphabet']
