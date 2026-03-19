@@ -1,0 +1,38 @@
+{
+    "rotors": [
+        {
+            "id": 1,
+            "name": "Custom Rotor 1",
+            "wiring": "WCPKDXABISYTOVHLGZEMQRUFJN"
+        },
+        {
+            "id": 2,
+            "name": "Custom Rotor 2",
+            "wiring": "UYCFRPIJODQXTVEGZLHKSWMBAN"
+        },
+        {
+            "id": 3,
+            "name": "Custom Rotor 3",
+            "wiring": "LGBUQYXITENVFOZKJACHDMSRPW"
+        }
+    ],
+    "reflector": "LKVYJPUNMEBAIHQFOTXRGCZSDW",
+    "cables": [
+        [
+            "I",
+            "U"
+        ],
+        [
+            "R",
+            "D"
+        ],
+        [
+            "B",
+            "J"
+        ],
+        [
+            "V",
+            "M"
+        ]
+    ]
+}
