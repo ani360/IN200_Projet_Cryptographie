@@ -7,12 +7,13 @@ from pathlib import Path
 
 # Get the script dir
 script_dir = Path(__file__).parent
+
+
 LangDict_path = script_dir / "LangDict.json"
-EniConfig_path = script_dir / "enigma_config.json"
-#import json
 with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
 
+EniConfig_path = script_dir / "config" / "enigma_config.json"
 with open(EniConfig_path, 'r', encoding='utf-8') as f:
     EnigmaConfigDict = json.load(f)
 
@@ -25,11 +26,28 @@ def sanitize(input : str)->str : #virer les accents
             final_list_char.append(char.upper())
     return "".join(final_list_char)
 
-def save_config(data, path, filename="enigma_config.json"):
-    filepath = os.path.join(path, filename)
+def save_config(data, filenameend="", overwrite=True):
+    folder = os.path.join("enigma", "config")
+    filename="enigma_config"
+
+    if not os.path.exists(folder):
+        os.makedirs(folder, exist_ok=True)
+
+    if overwrite:
+        target_filename = f"{filename}.json"
+    else:
+        target_filename = f"{filename}_{filenameend}.json"
+        if os.path.exists(os.path.join(folder, target_filename)):
+            yn : bool = int(input('Le fichier existe déjà voulez vous le remplacer (0 : oui ; 1 : non)'))
+            if yn == 1 :
+                return('Could not resolve config saving.')
+    filepath = os.path.join(folder, target_filename)
+
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
-    print(f"Configuration successfully saved to {filename}")
+    
+    print(f"Config saved to: {filepath}")
+    return filepath
 
 class rotor:
     def __init__(self,forward_map, lang):
@@ -132,7 +150,7 @@ class EnigmaMachine:
         return result
 
 
-def setup_generator(nrotor : int, ncables : int, lang) : #n = rotor number
+def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = rotor number
     alphabet : str = LangDictJson[lang]['alphabet']
     ncables = min(ncables, len(alphabet)//2)
     data = {
@@ -171,7 +189,8 @@ def setup_generator(nrotor : int, ncables : int, lang) : #n = rotor number
         char_b = available_chars.pop()
         data["cables"].append([char_a, char_b])
         
-    save_config(data, "Enigma")
+    save_config(data, '', overwrite)
     pass
 
-print(setup_generator(3, 4, 'french'))
+
+#print(setup_generator(3, 4, 'french', True))

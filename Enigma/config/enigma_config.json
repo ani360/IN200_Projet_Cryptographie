@@ -3,36 +3,36 @@
         {
             "id": 1,
             "name": "Custom Rotor 1",
-            "wiring": "HYDNILSZRCUKXJMBEOPWTGVQFA"
+            "wiring": "NOEXFLVJGPWKMTSYRQBZADCHIU"
         },
         {
             "id": 2,
             "name": "Custom Rotor 2",
-            "wiring": "OQHGBNSWFKYPDTZXLCUEJIVMRA"
+            "wiring": "WQUKVOYFLRCHZTXABEGNJDSIMP"
         },
         {
             "id": 3,
             "name": "Custom Rotor 3",
-            "wiring": "RZGTIMELDVONUFJHBCPSQAWYXK"
+            "wiring": "TKULFASIRJEPNHVWCGDOMZQXYB"
         }
     ],
-    "reflector": "GVOJXHAFPDQWZYCIKUTSRBLENM",
+    "reflector": "FUTLZAMJSHNDGKQYOXICBWVRPE",
     "cables": [
         [
-            "V",
-            "B"
+            "X",
+            "P"
         ],
         [
-            "R",
-            "U"
+            "K",
+            "Z"
+        ],
+        [
+            "Q",
+            "I"
         ],
         [
             "J",
-            "C"
-        ],
-        [
-            "O",
-            "M"
+            "T"
         ]
     ]
 }
