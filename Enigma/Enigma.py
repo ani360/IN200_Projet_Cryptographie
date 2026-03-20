@@ -188,9 +188,19 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
         char_a = available_chars.pop()
         char_b = available_chars.pop()
         data["cables"].append([char_a, char_b])
-        
-    save_config(data, '', overwrite)
+    
+    if not overwrite :
+        ending = input('name your folder : ')
+
+    save_config(data, ending, overwrite)
     pass
 
 
-#print(setup_generator(3, 4, 'french', True))
+print(setup_generator(6, 8, 'french', False))
+
+txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+txt = sanitize(txt)
+encoded = EnigmaMachine('french').process_text(txt)
+print(encoded)
+decoded = EnigmaMachine('french').process_text(encoded)
+print(decoded)
