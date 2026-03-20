@@ -93,7 +93,7 @@ class EnigmaMachine:
         self.rotors = [rotor(r['wiring'], lang) for r in EnigmaConfigDict['rotors']]
         self.reflector = Reflector(EnigmaConfigDict['reflector'], lang)
 
-    def process_text(self, text : str):
+    def process_text(self, text : str): #fonctionne dans les deux sens moyennant même config de départ.
         result : str = ""
         for char in text.upper():
             if char not in self.alphabet:
