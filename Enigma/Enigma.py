@@ -3,6 +3,7 @@ import os
 import random
 import unicodedata
 from pathlib import Path
+from itertools import permutations, product
 #from caesar import caesar_decrypt_freq #serat dans le fichier du code de césar
 
 # Get the script dir
@@ -118,13 +119,11 @@ class EnigmaMachine:
                 result += char
                 continue
             
-            # --- STEP 1: ACTUATION (The Odometer) ---
             # Every keypress moves the first rotor.
             if self.rotors[0].step():
                 if self.rotors[1].step():
                     self.rotors[2].step()
 
-            # --- STEP 2: FORWARD PASS ---
             # Signal enters via Plugboard
             current_char = self.plugboard.swap(char)
             
@@ -132,16 +131,13 @@ class EnigmaMachine:
             for r in self.rotors:
                 current_char = r.shift(current_char, reverse=False)
 
-            # --- STEP 3: REFLECTION ---
             # Signal hits the "Mirror"
             current_char = self.reflector.reflect(current_char)
 
-            # --- STEP 4: BACKWARD PASS ---
             # Signal goes back through rotors (R3 -> R2 -> R1)
             for r in reversed(self.rotors):
                 current_char = r.shift(current_char, reverse=True)
 
-            # --- STEP 5: FINAL PLUGBOARD ---
             # Signal exits via Plugboard to the Lampboard
             current_char = self.plugboard.swap(current_char)
             
@@ -149,6 +145,16 @@ class EnigmaMachine:
             
         return result
 
+def Calcul_IC(input : str, alphabet : str, pas : int) -> int : #calcul de l'indice de coincidence utile dans plusieurs autres fonctions
+    somf : list = []
+    somme = lambda nb : nb * (nb - 1)
+    input = ''.join([c for c in input if c.isalpha()])
+    for i in range(pas):
+        lettres : list = [0]*int(len(alphabet))
+        for n, lettre in enumerate(input[i::pas]) : #lettre est la lettre dans l'input et n est son occurence
+            lettres[ord(lettre)-65] +=1 #ajoute l'occurence dans la liste lettre.
+        somf.append(sum(map(somme, lettres))/float(n*(n+1))) #calcul de l'indice
+    return(sum(somf)/float(len(somf))) #return moyenne des indices
 
 def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = rotor number
     alphabet : str = LangDictJson[lang]['alphabet']
@@ -196,7 +202,7 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
     pass
 
 
-print(setup_generator(6, 8, 'french', False))
+#print(setup_generator(6, 8, 'french', False))
 
 txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
 txt = sanitize(txt)
