@@ -3,66 +3,66 @@
         {
             "id": 1,
             "name": "Custom Rotor 1",
-            "wiring": "MZWBTOUIGKLAFQCDPERHVYSJXN"
+            "wiring": "GLPCWXJKYVFAISTZBRQDUMEOHN"
         },
         {
             "id": 2,
             "name": "Custom Rotor 2",
-            "wiring": "EIXYHFPOVBSRKCNTMZGLQWDUJA"
+            "wiring": "PLRCTUGFNOMYDEVQHWSBKXZJIA"
         },
         {
             "id": 3,
             "name": "Custom Rotor 3",
-            "wiring": "GKYPJUQMDTCZHSWAERLBIVNXOF"
+            "wiring": "ULTQBGKHODFMCIWRANVYXZSEJP"
         },
         {
             "id": 4,
             "name": "Custom Rotor 4",
-            "wiring": "JBTDSUIHAOVZRQNFYWMGLPXECK"
+            "wiring": "ZMDSNBJAOQEPVRCLXWTUIFHKGY"
         },
         {
             "id": 5,
             "name": "Custom Rotor 5",
-            "wiring": "CFKYZUEPNLIOGARXVQJMWTDSHB"
+            "wiring": "DNEFCYXJVQLTHPIWAOGBSUKZRM"
         },
         {
             "id": 6,
             "name": "Custom Rotor 6",
-            "wiring": "ZAUWXKNYEFIDJOTBGSQLRVCPHM"
+            "wiring": "ABCWULJRYQEPDKMHITSFXGVONZ"
         }
     ],
-    "reflector": "YZNPOMKXTLGJFCEDSWQIVURHAB",
+    "reflector": "BAKXYTNWRUCZPGVMSIQFJOHDEL",
     "cables": [
         [
-            "N",
-            "M"
+            "Z",
+            "J"
         ],
         [
-            "S",
-            "I"
-        ],
-        [
-            "V",
-            "F"
-        ],
-        [
-            "J",
-            "Y"
-        ],
-        [
-            "C",
-            "W"
-        ],
-        [
-            "X",
-            "A"
-        ],
-        [
-            "O",
-            "H"
+            "U",
+            "N"
         ],
         [
             "R",
+            "A"
+        ],
+        [
+            "H",
+            "B"
+        ],
+        [
+            "F",
+            "E"
+        ],
+        [
+            "X",
+            "T"
+        ],
+        [
+            "M",
+            "O"
+        ],
+        [
+            "S",
             "Q"
         ]
     ]
