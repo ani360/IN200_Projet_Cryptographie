@@ -206,6 +206,6 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
 txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
 txt = sanitize(txt)
 encoded = EnigmaMachine('french').process_text(txt)
-"""print(encoded)
-decoded = EnigmaMachine('french').process_text(encoded1)
-print(decoded)"""
+print(encoded)
+decoded = EnigmaMachine('french').process_text(encoded)
+print(decoded)
