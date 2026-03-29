@@ -1,7 +1,6 @@
-import os, sys,json, requests, random, unicodedata
+import os, sys,json, requests, random, unicodedata, math, time
 from pathlib import Path
 from itertools import permutations, product
-import math
 #from caesar import caesar_decrypt_freq #serat dans le fichier du code de césar
 
 # Get the script dir
@@ -104,11 +103,12 @@ class Plugboard:
         return self.mapping.get(char, char)
 
 class EnigmaMachine:
-    def __init__(self, lang):
+    def __init__(self, lang, custom_config = None):
+        config = custom_config if custom_config is not None else EnigmaConfigDict
         self.alphabet : str = LangDictJson[lang]['alphabet']
-        self.plugboard : list[list[str]] = Plugboard(EnigmaConfigDict['cables'], lang)
-        self.rotors = [rotor(r['wiring'], lang) for r in EnigmaConfigDict['rotors']]
-        self.reflector = Reflector(EnigmaConfigDict['reflector'], lang)
+        self.plugboard : list[list[str]] = Plugboard(config['cables'], lang)
+        self.rotors = [rotor(r['wiring'], lang) for r in config['rotors']]
+        self.reflector = Reflector(config['reflector'], lang)
 
     def process_text(self, text : str): #fonctionne dans les deux sens moyennant même config de départ.
         result : str = ""
@@ -118,9 +118,10 @@ class EnigmaMachine:
                 continue
             
             # Every keypress moves the first rotor.
-            if self.rotors[0].step():
-                if self.rotors[1].step():
-                    self.rotors[2].step()
+            i = 0
+            LRotor = len(self.rotors)
+            while i < LRotor and self.rotors[i].step():
+                i += 1
 
             # Signal enters via Plugboard
             current_char = self.plugboard.swap(char)
@@ -143,17 +144,6 @@ class EnigmaMachine:
             
         return result
 
-def Calcul_IC(input : str, alphabet : str, pas : int) -> int : #calcul de l'indice de coincidence utile dans plusieurs autres fonctions
-    somf : list = []
-    somme = lambda nb : nb * (nb - 1)
-    input = ''.join([c for c in input if c.isalpha()])
-    for i in range(pas):
-        lettres : list = [0]*int(len(alphabet))
-        for n, lettre in enumerate(input[i::pas]) : #lettre est la lettre dans l'input et n est son occurence
-            lettres[ord(lettre)-65] +=1 #ajoute l'occurence dans la liste lettre.
-        somf.append(sum(map(somme, lettres))/float(n*(n+1))) #calcul de l'indice
-    return(sum(somf)/float(len(somf))) #return moyenne des indices
-
 def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = rotor number
     alphabet : str = LangDictJson[lang]['alphabet']
     ncables = min(ncables, len(alphabet)//2)
@@ -165,7 +155,7 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
     alphalist = list(alphabet)
     for i in range(nrotor) :
         shuffled = alphalist[:]
-        random.SystemRandom().shuffle(shuffled)
+        random.shuffle(shuffled)
         data["rotors"].append({
             "id": i + 1,
             "name": f"Custom Rotor {i + 1}",
@@ -175,7 +165,7 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
     # A reflector MUST swap letters in pairs. A cannot map to A.
     reflector_map = [None] * len(alphalist)
     available_indices : list = list(range(len(alphalist)))
-    random.SystemRandom().shuffle(available_indices)
+    random.shuffle(available_indices)
 
     while available_indices :
         idx_a = available_indices.pop()
@@ -186,7 +176,7 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
     data["reflector"] = "".join(reflector_map)
 
     available_chars = alphalist[:]
-    random.SystemRandom().shuffle(available_chars)
+    random.shuffle(available_chars)
     
     for _ in range(ncables):
         char_a = available_chars.pop()
@@ -203,9 +193,9 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
 
 #print(setup_generator(6, 8, 'french', True))
 
-txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+"""txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
 txt = sanitize(txt)
 encoded = EnigmaMachine('french').process_text(txt)
 print(encoded)
 decoded = EnigmaMachine('french').process_text(encoded)
-print(decoded)
+print(decoded)"""
