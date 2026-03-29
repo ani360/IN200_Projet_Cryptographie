@@ -202,7 +202,8 @@ def vigenere_decrypt(input : int, lang : str) -> str:
 
     return(f'key = {key}, text = {vigenere_decode(input, key, lang)}')
 
-txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
-#print(generate_vigenere_encode_table('english'))
-encoded = vigenere_encode(txt, 'DEGAULLE', "french")
-print(vigenere_decrypt(encoded, 'french'))
+if __name__ == "__main__":
+    txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+    #print(generate_vigenere_encode_table('english'))
+    encoded = vigenere_encode(txt, 'DEGAULLE', "french")
+    print(vigenere_decrypt(encoded, 'french'))
