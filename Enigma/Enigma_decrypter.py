@@ -105,7 +105,7 @@ def crack_enigma(ciphertext, lang, target_timestamp, window_seconds=10, max_roto
         return "[-] Attack failure."
 
 
-# --- TEST ---
+# --- TEST --- #on notera que ce programme NE RETOURNE PAS TOUJOURS LA BONNE SOLUTION mais cette dèrnière apparaît très souvent dans les candidats le calcul du score ne pouvant etre meilleure (surtout pour les messages les plus cours)
 if __name__ == "__main__":
     # simulation
     instant_creation = int(time.time()) 
