@@ -55,7 +55,7 @@ def get_text_score(text, lang): #score
     tetragrams = LangDictJson[lang]['tetragrams']
     text_upper = text.upper()
     for tetra in tetragrams:
-        tetra_score += text_upper.count(tetra)
+        tetra_score += 2*text_upper.count(tetra) #note, les coeficients des scores sont arbitraires et expérimentaux.
 
     #bonus for IC score
     try:
@@ -65,7 +65,6 @@ def get_text_score(text, lang): #score
             tetra_score += len(text)//33
     except:
         pass
-        
     return tetra_score
 
 def crack_enigma(ciphertext, lang, target_timestamp, window_seconds=10, max_rotors=6, max_ncables=10):
@@ -118,6 +117,7 @@ if __name__ == "__main__":
     machine = EnigmaMachine(langue, custom_config=config_reelle)
     
     msg = "Le but de ce projet est de programmer des algorithmes capables de casser ces chiffrements anciens."
+    #msg : str = "En résumé, l'avantage n'est pas 'sur' le dictionnaire, c'est que le dictionnaire est l'application concrète de ce que tu es en train d'apprendre. C'est le moteur sous le capot de presque tous les langages modernes !"
     msg = sanitize(msg)
     cipher = machine.process_text(msg)
     print(f"Ciphertext: {cipher}\n")
