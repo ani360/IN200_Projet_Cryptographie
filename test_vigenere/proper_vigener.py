@@ -189,11 +189,12 @@ def vigenere_decode(input : str, key : str, lang : str) -> str:
 
 def vigenere_decrypt(input : int, lang : str) -> str:
     alphabet : str = LangDictJson[lang]["alphabet"]
+    IC : float = LangDictJson[lang]["IC"]
     L : int = len(alphabet)
     plaintext : str = sanitize(input)
     plaintext = ''.join(char for char in plaintext if char.isalpha())
     pas = 1
-    while Calcul_IC(plaintext, alphabet, pas) < 0.065 :
+    while Calcul_IC(plaintext, alphabet, pas) < IC :
         pas+=1
     fractionne = [plaintext[start::pas] for start in range(pas)]
     indices_cles = [caesar(bout).decrypt_freq(lang) for bout in fractionne]
@@ -202,8 +203,16 @@ def vigenere_decrypt(input : int, lang : str) -> str:
 
     return(f'key = {key}, text = {vigenere_decode(input, key, lang)}')
 
-if __name__ == "__main__":
-    txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+if __name__ == "__main__": #DECRYPTER WON'T WORK EVERY TIME ESPECIALLY WITH LONGER KEYS OR TEXTS WITH UNEVEN LETTER DISTRIBUTION.
+    frtxt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+    entxt = "Letter frequency is the number of times letters of the alphabet appear on average in written language. Letter frequency analysis dates back to the Arab mathematician Al-Kindi"
     #print(generate_vigenere_encode_table('english'))
-    encoded = vigenere_encode(txt, 'DEGAULLE', "french")
-    print(vigenere_decrypt(encoded, 'french'))
+    FRencoded = vigenere_encode(frtxt, 'DEGAULLE', "french")
+    #ENencoded = vigenere_encode(entxt, 'KINDI', "english")
+    print(FRencoded)
+    #print(ENencoded)
+    print(vigenere_decode(FRencoded, 'DEGAULLE', 'french'))
+    #print(vigenere_decode(ENencoded, 'KINDI', 'english'))
+    print(vigenere_decrypt(FRencoded, "french"))
+    #print(vigenere_decrypt(ENencoded, "english"))
+    
