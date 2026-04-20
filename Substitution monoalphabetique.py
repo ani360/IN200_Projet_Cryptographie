@@ -1,20 +1,12 @@
 import json, unicodedata, random
 from pathlib import Path
+from Sanitizer import sanitize
 
 script_dir = Path(__file__).parent
 
 LangDict_path = script_dir / "LangDict.json"
 with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
-
-def sanitize(input : str)->str : #virer les accents
-    normalized = unicodedata.normalize('NFD', input) #remplace é par e'
-    result = "".join(char for char in normalized if unicodedata.category(char) != 'Mn')
-    final_list_char = []
-    for char in result:
-        if char.isalpha() or char.isspace():
-            final_list_char.append(char.upper())
-    return "".join(final_list_char)
 
 def monoalph(input : str, Dsub : dict, lang):
     alphabet : str = LangDictJson[lang]['alphabet']
