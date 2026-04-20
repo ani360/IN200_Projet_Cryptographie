@@ -4,7 +4,7 @@ from Sanitizer import sanitize
 
 script_dir = Path(__file__).parent
 
-LangDict_path = script_dir / "LangDict.json"
+LangDict_path = script_dir.parent / "LangDict.json"
 with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
 
@@ -22,8 +22,7 @@ def monoalph(input : str, Dsub : dict, lang):
 def config_generator(nsubstitution, lang):
     nsubstitution = nsubstitution%14
     alphabet : str = LangDictJson[lang]['alphabet']
-    alphalist = list(alphabet)
-    available_chars = alphalist[:]
+    available_chars = list(alphabet)
     random.shuffle(available_chars)
     dsub = {}
     for _ in range(nsubstitution):
