@@ -55,7 +55,7 @@ def get_text_score(text, lang): #score
     tetragrams = LangDictJson[lang]['tetragrams']
     text_upper = text.upper()
     for tetra in tetragrams:
-        tetra_score += 2*text_upper.count(tetra) #note, les coeficients des scores sont arbitraires et expérimentaux.
+        tetra_score += 3*text_upper.count(tetra) #note, les coeficients des scores sont arbitraires et expérimentaux.
 
     #bonus for IC score
     try:
