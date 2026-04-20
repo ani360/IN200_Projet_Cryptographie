@@ -6,8 +6,7 @@ from itertools import permutations, product
 # Get the script dir
 script_dir = Path(__file__).parent
 
-
-LangDict_path = script_dir / "LangDict.json"
+LangDict_path = script_dir.parent / "LangDict.json"
 with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
 

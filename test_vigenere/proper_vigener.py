@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Get the script dir
 script_dir = Path(__file__).parent
-file_path = script_dir / "LangDict.json"
+file_path = script_dir.parent / "LangDict.json"
 
 #import json
 with open(file_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
