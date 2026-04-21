@@ -1,4 +1,4 @@
-#GEMINI/GPT/CLAUDE + Lis pas le objectif.md ; Pas très sérieux tt ça !
+#GEMINI/GPT/CLAUDE + Lis pas le objectif.md + il est où le JSON ? ; Pas très sérieux tt ça !
 
 # 1. LES LANGUES
 langues = {
