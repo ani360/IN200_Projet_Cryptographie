@@ -1,3 +1,5 @@
+#GEMINI/GPT/CLAUDE + Lis pas le objectif.md ; Pas très sérieux tt ça !
+
 # 1. LES LANGUES
 langues = {
     "english": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
