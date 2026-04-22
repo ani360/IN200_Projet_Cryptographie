@@ -1,41 +1,18 @@
-#GEMINI/GPT/CLAUDE + Lis pas le objectif.md + il est où le JSON ? ; Pas très sérieux tt ça !
+import unicodedata
+import json
 
-# 1. LES LANGUES
-langues = {
-    "english": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "french": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "german": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "spanish": "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ",
-    "italian": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "portuguese": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    "russian": "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-}
-
-# 2. LES FONCTIONS
-def nettoyer(texte_du_fichier, alphabet, supprimer_espaces=False):
-    message = ""
-    accents = {
-        'é':'e', 'è':'e', 'ê':'e', 'ë':'e', 'à':'a', 
-        'â':'a', 'î':'i', 'ï':'i', 'ô':'o', 'ù':'u', 
-        'û':'u', 'ç':'c'
-    }
-
-    for caractere in texte_du_fichier.upper():       
-        if caractere.lower() in accents:
-            caractere = accents[caractere.lower()].upper()
-
-        if caractere == " " and supprimer_espaces == True:
-            continue 
-
-        if caractere in alphabet:
-            message = message + caractere
-            
-    return message 
+def sanitize(input_str: str) -> str:
+    normalized = unicodedata.normalize('NFD', input_str)
+    result = "".join(char for char in normalized if unicodedata.category(char) != 'Mn')
+    final_list_char = []
+    for char in result:
+        if char.isalpha() or char.isspace():
+            final_list_char.append(char.upper())
+    return "".join(final_list_char)
 
 def caesar(message, cle, alphabet):
     message_chiffre = ""
     taille = len(alphabet)
-
     for letter in message:
         if letter in alphabet:
             index = alphabet.find(letter)
@@ -45,50 +22,33 @@ def caesar(message, cle, alphabet):
             message_chiffre += letter
     return message_chiffre
 
-# 3. LE MAIN
 def main():
-    # Choix de la langue
-    print("Langues disponibles :")
-    for langue in langues.keys():
-        print("- " + langue)
-    
-    choix_langue = input("Quelle langue choisir ? ").lower()
-    alphabet = langues.get(choix_langue, langues["english"])
-    
-    print("Taille de l'alphabet :", len(alphabet))
-
-    # CHOIX DU FICHIER
-    chemin = input("Entrez l'adresse du fichier .txt : ")
-    
-    # ENCODAGE OU DECODAGE
-    mode = input("Voulez-vous (1) Chiffrer ou (2) Déchiffrer ? ")
-    cle = int(input("Clé de décalage : "))
-    
-    if mode == "2":
-        cle = -cle
-    # AJOUT OU SUPRESSION DES ESPACES
-
-    reponse = input("Voulez-vous supprimer les espaces ? (o/n) : ")
-    supprimer_espaces = (reponse.lower() == "o")
-
-    # LECTURE DU FICHIER
-    f_input = open(chemin, "r")
-    texte_du_fichier = "" 
-    ligne = f_input.readline() 
-    while ligne != "":
-        texte_du_fichier = texte_du_fichier + ligne 
-        ligne = f_input.readline() 
+    f_input = open("LangDict.json", "r")
+    langues = json.load(f_input)
     f_input.close()
+    
+    for nom_langue in langues.keys():
+        print("- " + nom_langue)
+        
+    choix = input("Langue ???? : ").lower()
+    alphabet = langues[choix]["alphabet"]
+    texte = "BRAVO" ##########c'est un test pour que le prog puisse fonctionner
+    mode = input("1.Chiffrer | 2.Déchiffrer | 3.Brute Force : ")
+    message_propre = sanitize(texte)
+    
+    if mode == "1":
+        cle = int(input("Clé : "))
+        print("Résultat :", caesar(message_propre, cle, alphabet))
 
-    # ON TRAITE LE FICHIER
-    message_propre = nettoyer(texte_du_fichier, alphabet, supprimer_espaces)
-    resultat = caesar(message_propre, cle, alphabet)
+    elif mode == "2":
+        cle = int(input("Clé : "))
+        print("Résultat :", caesar(message_propre, -cle, alphabet))
 
-    # RESULTATS
-    print("\nTexte d'origine :")
-    print(texte_du_fichier)
-    print("\nRésultat :")
-    print(resultat)
+    elif mode == "3":
+        print("\nBRUTEFORCEEEEEEEEEEE")
+        for k in range(len(alphabet)):
+            tentative_de_bruteforce = caesar(message_propre, -k, alphabet)
+            print("Clé " + str(k) + " : " + tentative_de_bruteforce)
 
-if __name__ == "__main__":
-    main()
+######## Remy comment ca marche l'analyse de frequence si j'ai bien compris je dois trouver la lettre la plus fréquente dans le texte puis je regarde dans  JSON quelle est la lettre la plus fréquente pour la langue choisie pour ensuite calculer la distance entre les deux pour en deduire la clé c'et bien ca ?
+
