@@ -1,5 +1,13 @@
 import unicodedata
 import json
+from pathlib import Path
+
+script_dir = Path(__file__).parent
+
+LangDict_path = script_dir.parent / "LangDict.json"
+with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
+    LangDictJson = json.load(f)
+
 
 def sanitize(input_str: str) -> str:
     normalized = unicodedata.normalize('NFD', input_str)
@@ -36,6 +44,8 @@ def main():
     mode = input("1.Chiffrer | 2.Déchiffrer | 3.Brute Force : ")
     message_propre = sanitize(texte)
     
+    #If, elif,elif = idée de merde car si l'utilisateur met ni 1 ni 2 ni 3 t'est cook.
+
     if mode == "1":
         cle = int(input("Clé : "))
         print("Résultat :", caesar(message_propre, cle, alphabet))
@@ -45,10 +55,31 @@ def main():
         print("Résultat :", caesar(message_propre, -cle, alphabet))
 
     elif mode == "3":
-        print("\nBRUTEFORCEEEEEEEEEEE")
+        print("\nBRUTEFORCEEEEEEEEEEE") #serieusement ?????
         for k in range(len(alphabet)):
             tentative_de_bruteforce = caesar(message_propre, -k, alphabet)
             print("Clé " + str(k) + " : " + tentative_de_bruteforce)
 
 ######## Remy comment ca marche l'analyse de frequence si j'ai bien compris je dois trouver la lettre la plus fréquente dans le texte puis je regarde dans  JSON quelle est la lettre la plus fréquente pour la langue choisie pour ensuite calculer la distance entre les deux pour en deduire la clé c'et bien ca ?
+#pour l'analyse de frequence tu peut te baser sur ce que j'ai fait dans la class caesar de test crypto (attention j'ai aucune idée de si il  marche car je vien de le modifier) :
 
+"""
+def decrypt_freq(input : str, lang : str) -> int: #trouve la clée corresspondante par analyse de fréquence.
+        l = float(len(input))
+        dict_freq = LangDictJson[lang]['PP']
+        alphabet = LangDictJson[lang]['alphabet']
+        score : list = [0, 100]
+        input = sanitize(input)
+        for i in range (26):
+            diff = sum(abs(b - dict_freq[a]) for a, b in enumerate([100 * lettre / l for lettre in map(input.count, alphabet)]))
+            if diff < score[1]: 
+                score = i, diff
+            input : str = caesar(input, 1, alphabet)
+        return score[0]
+"""
+
+#pour le main() je t'avais dit d'oublier, tu ne demande rien a l'utilisateur tu code juste les fonction je veut pas voir un input()
+#qd tu fait  un test pour run ton code tu met : 
+if __name__ == "__main__":
+    #remplir le code ici
+    pass
