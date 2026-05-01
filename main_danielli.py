@@ -106,7 +106,7 @@ def decrypt_freq(input : str, lang : str) -> int: #trouve la clée corresspondan
 if __name__ == "__main__":
     langue = "french"
     alphabet = LangDictJson[langue]["alphabet"]
-    phrase_a_crypter = sanitize("La folie c’est de toujours faire la même chose et de s’attendre à un résultat différent .") 
+    phrase_a_crypter = sanitize("ussop,est,un. gros blaireau .") 
     phrase_codee = caesar(phrase_a_crypter, 10, alphabet)
     print("phrase codée :", phrase_codee)
     cle_detectee = decrypt_freq(phrase_codee, langue)
