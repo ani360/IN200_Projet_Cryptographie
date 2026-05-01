@@ -3,13 +3,12 @@ import json
 from pathlib import Path
 
 script_dir = Path(__file__).parent
-
 LangDict_path = script_dir.parent / "LangDict.json"
-with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
+
+with open(LangDict_path, 'r', encoding='utf-8') as f: 
     LangDictJson = json.load(f)
 
-
-def sanitize(input_str: str) -> str:
+def sanitize(input_str):
     normalized = unicodedata.normalize('NFD', input_str)
     result = "".join(char for char in normalized if unicodedata.category(char) != 'Mn')
     final_list_char = []
@@ -30,35 +29,33 @@ def caesar(message, cle, alphabet):
             message_chiffre += letter
     return message_chiffre
 
-def main():
-    f_input = open("LangDict.json", "r")
-    langues = json.load(f_input)
-    f_input.close()
+def brute_force(message, alphabet):
+    tentatives_bruteforce = {}
+    message_propre = sanitize(message)
+    for k in range(len(alphabet)):
+        tentatives_bruteforce[k] = caesar(message_propre, -k, alphabet)
+    return tentatives_bruteforce
+
+
+if __name__ == "__main__":
+    langue_choisie = "french"
+    alphabet = LangDictJson[langue_choisie]["alphabet"]
+    texte_depart = "danièlli8!"
+    cle_s= 1
+
     
-    for nom_langue in langues.keys():
-        print("- " + nom_langue)
-        
-    choix = input("Langue ???? : ").lower()
-    alphabet = langues[choix]["alphabet"]
-    texte = "BRAVO" ##########c'est un test pour que le prog puisse fonctionner
-    mode = input("1.Chiffrer | 2.Déchiffrer | 3.Brute Force : ")
-    message_propre = sanitize(texte)
+    msg_propre = sanitize(texte_depart)
+    print("Message propre :", msg_propre)
     
-    #If, elif,elif = idée de merde car si l'utilisateur met ni 1 ni 2 ni 3 t'est cook.
-
-    if mode == "1":
-        cle = int(input("Clé : "))
-        print("Résultat :", caesar(message_propre, cle, alphabet))
-
-    elif mode == "2":
-        cle = int(input("Clé : "))
-        print("Résultat :", caesar(message_propre, -cle, alphabet))
-
-    elif mode == "3":
-        print("\nBRUTEFORCEEEEEEEEEEE") #serieusement ?????
-        for k in range(len(alphabet)):
-            tentative_de_bruteforce = caesar(message_propre, -k, alphabet)
-            print("Clé " + str(k) + " : " + tentative_de_bruteforce)
+    msg_crypte = caesar(msg_propre, cle_s, alphabet)
+    print("Message crypte + clé :", msg_crypte, cle_s)
+    
+    
+    resultats = brute_force(msg_crypte, alphabet)
+    
+    for k in range(5):
+        print("Decalage", k, ":", resultats[k])
+    
 
 ######## Remy comment ca marche l'analyse de frequence si j'ai bien compris je dois trouver la lettre la plus fréquente dans le texte puis je regarde dans  JSON quelle est la lettre la plus fréquente pour la langue choisie pour ensuite calculer la distance entre les deux pour en deduire la clé c'et bien ca ?
 #pour l'analyse de frequence tu peut te baser sur ce que j'ai fait dans la class caesar de test crypto (attention j'ai aucune idée de si il  marche car je vien de le modifier) :
