@@ -27,10 +27,6 @@ def cryptage_scytale2(texte, clé):
             message_encodé += ruban_sur_baton[k][b]
     return(message_encodé)
 
-
-texte_essai = cryptage_scytale2("scytale spartiate", 4 )
-    
-print(texte_essai)
 def décryptage_scytale2_cle(text, cle): 
     message_decrypte = ""
     k= 0
@@ -44,9 +40,6 @@ def décryptage_scytale2_cle(text, cle):
         k+=1
     return(message_decrypte)
 
-print(décryptage_scytale2_cle(texte_essai, 4))
-
-
 # fonction de calcul de l'IC pour un texte et une langue donnée : 
 def calcul_IC(txt, lang): 
     nbre_caracteres = len(txt)
@@ -57,11 +50,6 @@ def calcul_IC(txt, lang):
         somme += (B**2 - B )
     
     return (somme/((nbre_caracteres)**2 - nbre_caracteres))
-
-
-
-
-
 
 # fonction de décryptage en bruteforce 
 
@@ -75,17 +63,8 @@ def décryptage_scytale2(texte_encodé, lang):
     for k in range(2, clé_maximale):
         texte_du_pas= décryptage_scytale2_cle(texte_encodé, k)
         messages_par_clé[k] = texte_du_pas
-  
 
-
-
-
-    
-
-
-    
-
-
-
-
-
+if __name__ == "__main__":
+    texte_essai = cryptage_scytale2("scytale spartiate", 4 )
+    print(texte_essai)
+    print(décryptage_scytale2_cle(texte_essai, 4))
