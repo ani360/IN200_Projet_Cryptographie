@@ -37,24 +37,7 @@ def brute_force(message, alphabet):
     return tentatives_bruteforce
 
 
-if __name__ == "__main__":
-    langue_choisie = "french"
-    alphabet = LangDictJson[langue_choisie]["alphabet"]
-    texte_depart = "danièlli8!"
-    cle_s= 1
-
     
-    msg_propre = sanitize(texte_depart)
-    print("Message propre :", msg_propre)
-    
-    msg_crypte = caesar(msg_propre, cle_s, alphabet)
-    print("Message crypte + clé :", msg_crypte, cle_s)
-    
-    
-    resultats = brute_force(msg_crypte, alphabet)
-    
-    for k in range(5):
-        print("Decalage", k, ":", resultats[k])
     
 
 ######## Remy comment ca marche l'analyse de frequence si j'ai bien compris je dois trouver la lettre la plus fréquente dans le texte puis je regarde dans  JSON quelle est la lettre la plus fréquente pour la langue choisie pour ensuite calculer la distance entre les deux pour en deduire la clé c'et bien ca ?
@@ -78,5 +61,21 @@ def decrypt_freq(input : str, lang : str) -> int: #trouve la clée corresspondan
 #pour le main() je t'avais dit d'oublier, tu ne demande rien a l'utilisateur tu code juste les fonction je veut pas voir un input()
 #qd tu fait  un test pour run ton code tu met : 
 if __name__ == "__main__":
-    #remplir le code ici
-    pass
+    langue_choisie = "french"
+    alphabet = LangDictJson[langue_choisie]["alphabet"]
+    texte_depart = "danièlli8!"
+    cle_s= 1
+
+    
+    msg_propre = sanitize(texte_depart)
+    print("Message propre :", msg_propre)
+    
+    msg_crypte = caesar(msg_propre, cle_s, alphabet)
+    print("Message crypte + clé :", msg_crypte, cle_s)
+    
+    
+    resultats = brute_force(msg_crypte, alphabet)
+    
+    for k in range(5):
+        print("Decalage", k, ":", resultats[k])    
+        pass
