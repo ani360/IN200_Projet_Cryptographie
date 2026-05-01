@@ -36,6 +36,16 @@ def brute_force(message, alphabet):
         tentatives_bruteforce[k] = caesar(message_propre, -k, alphabet)
     return tentatives_bruteforce
 
+def analyse_de_frequence1(message, langue):
+    message_propre=sanitize(message) 
+    dict_freq = LangDictJson[langue]['PP']
+    alphabet = LangDictJson[langue]['alphabet']
+    taille=len(message_propre)
+    frequences_apparition_lettres={}
+    for lettre in alphabet
+        nombre_apparition=message_propre.count(lettre)
+        frequences_apparition_lettres[lettre]=(nombre_apparition/taille)*100
+    return frequences_apparition_lettres
 
     
     
