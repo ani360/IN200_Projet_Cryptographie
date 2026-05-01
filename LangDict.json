@@ -16,15 +16,51 @@
             ],
             
         "bigrammes impossibles": 
-        ["AA", "HH", "JJ", "KK", "QQ", "VV", "WW", "XX", "YY"],
+        ["AA", "HH", "JJ", "KK", "QQ","UU", "VV", "WW", "XX", "YY",
+    "JB", "JC", "JD", "JF", "JG", "JH", "JK", "JL", "JM",
+    "JN", "JP", "JQ", "JR", "JS", "JT", "JV", "JW", "JX",
+    "JY", "JZ", "QA", "QB", "QC", "QD", "QE", "QF", "QG", 
+    "QH", "QI", "QJ", "QK", "QL", "QM", "QN", "QO", "QP", 
+    "QQ", "QR", "QS", "QT", "QV", "QW", "QX", "QY", "QZ",
+    "AQ", "BQ", "CQ", "DQ", "FQ", "GQ", "HQ", "JQ", "KQ",
+    "LQ", "MQ", "NQ", "PQ", "RQ", "SQ", "TQ", "VQ", "WQ",
+    "XQ", "YQ", "ZQ", "BH", "DH", "FH", "GH", "HH", "JH", 
+    "KH", "MH", "NH", "VH", "WH", "XH", "YH", "ZH", "HB", 
+    "HC", "HD", "HF", "HG", "HK", "HM", "HP", "HQ", "HR", 
+    "HS", "HV", "HW", "HX", "HZ", "WB", "WC", "WD", "WF", 
+    "WG", "WH", "WJ", "WK", "WL", "WM", "WN", "WP", "WQ", 
+    "WR", "WS", "WT", "WV", "WX", "WY", "WZ", "BW", "CW", 
+    "DW", "FW", "GW", "JW", "KW", "LW", "MW", "NW", "PW", 
+    "RW", "SW", "TW", "VW", "XW", "ZW", "KB", "KC", "KD", 
+    "KF", "KG", "KH", "KJ", "KM", "KN", "KP", "KQ", "KR", 
+    "KT", "KV", "KW", "KX", "KZ", "BK", "CK", "DK", "FK", 
+    "GK", "JK", "LK", "MK", "NK", "PK", "SK", "TK", "VK", 
+    "WK", "XK", "ZK", "BJ", "BN", "BQ", "BV", "BX", "BZ",
+    "CB", "CD", "CF", "CJ", "CM", "CN", "CP", "CV", "CX", 
+    "CZ", "DC", "DF", "DJ", "DK", "DM", "DN", "DP", "DQ", 
+    "DV", "DX", "DZ", "FB", "FD", "FJ", "FM", "FN", "FV", 
+    "FW", "FX", "FZ", "GB", "GC", "GF", "GJ", "GK", "GM", 
+    "GP", "GQ", "GV", "GX", "GZ", "LJ", "MJ", "NJ", "PB", 
+    "PD", "PF", "PJ", "PK", "PM", "PN", "PQ", "PV", "PW", 
+    "PX", "PZ", "RB", "RC", "RF", "RG", "RJ", "RK", 
+    "RM", "RN", "RP", "SB", "SD", "SF", "SG", "SJ", 
+    "SK", "SM", "SN", "TB", "TF", "TJ", "TK", 
+    "TM", "TN", "TV", "TW", "TX", "TZ", "VB", "VC", "VD", 
+    "VF", "VG", "VJ", "VK", "VM", "VN", "VP", "VQ", "VR", 
+    "VS", "VT", "VW", "VX", "VZ", "XB", "XC", "XD", "XF", 
+    "XG", "XJ", "XK", "XM", "XN", "XP", "XQ", "XR", "XS", 
+    "XT", "XV", "XW", "XZ", "ZB", "ZC", "ZD", "ZF", "ZG", 
+    "ZH", "ZJ", "ZK", "ZM", "ZN", "ZP", "ZQ", "ZR", "ZS", 
+    "ZT", "ZV", "ZW", "ZX", "IY", "YI", "YU", "UY", "YW"
+    ],
 
-        "mots deux lettre possibles": 
+        "mots deux lettres possibles": 
         [
             "AI", "AS", "AU", "CA", "CE", "CI", "DE", "DU", "EN", "ES", "ET", 
             "EU", "IL", "JE", "LA", "LE", "LU", "MA", "ME", "NE", "NI", "ON", "OR", 
             "OU", "SA", "SE", "SI", "TA", "TE", "TU", "UN", "VA", "VU"
             ],
-        "mots_trois_lettres_possible": 
+        "mots trois lettres possibles": 
         [
             "AGE", "AIR", "AME", "ANE", "ARC", "AUX", "AXE", "BAC", "BAL", 
             "BAR", "BAS", "BAT", "BEC", "BEL", "BLE", "BOA", "BOL", "BON", 

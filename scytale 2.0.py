@@ -34,7 +34,6 @@ def décryptage_scytale2_cle(text, cle):
     while k < len(text) :
         if b > (len(text) - 1) : 
             b = (b % (len(text)-1))
-        print(b)
         message_decrypte += text[b]
         b+= cle
         k+=1
@@ -54,17 +53,50 @@ def calcul_IC(txt, lang):
 # fonction de décryptage en bruteforce 
 
 def décryptage_scytale2(texte_encodé, lang):
-    IClang = LangDictJson[lang]['IC']
     messages_par_clé = {}
-    écart_ICpas_IClang = {}
-    clés_textes_éligibles = []
     clé_maximale = len(texte_encodé)-1
+    une_lettre = frozenset(LangDictJson[lang]["lettres seules impossibles"])
+    bigrammes = frozenset(LangDictJson[lang]["bigrammes impossibles"])
+    dico_deux_lettres = frozenset(LangDictJson[lang]["mots deux lettres possibles"])
+    dico_trois_lettres = frozenset(LangDictJson[lang]["mots trois lettres possibles"])
     
-    for k in range(2, clé_maximale):
-        texte_du_pas= décryptage_scytale2_cle(texte_encodé, k)
-        messages_par_clé[k] = texte_du_pas
+    for clé in range(2, clé_maximale):
+        messages_par_clé[clé] = décryptage_scytale2_cle(texte_encodé, clé).split()
+    
+    b = frozenset(messages_par_clé.keys())
+    for clé in b :
+        if frozenset(messages_par_clé[clé]).isdisjoint(une_lettre) == False :
+                del messages_par_clé[clé]
+                break
+    b = frozenset(messages_par_clé.keys())         
+    for clé in b :
+        for mot in messages_par_clé[clé] :
+            if {mot[i:i+2] for i in range(len(mot)-1)}.isdisjoint(bigrammes) == False :       
+                    del messages_par_clé[clé]
+                    break
+
+    b = frozenset(messages_par_clé.keys())            
+    for clé in b :
+        for mot in messages_par_clé[clé]: 
+            if len(mot) ==2 :
+                if mot not in dico_deux_lettres :
+                    del messages_par_clé[clé]
+                    break
+    b = frozenset(messages_par_clé.keys())
+    for clé in b :
+        for mot in messages_par_clé[clé]:
+            if len(mot)==3 :
+                if mot not in dico_trois_lettres :
+                    del messages_par_clé[clé]
+                    break
+    
+    print(messages_par_clé)
+    
+
+
 
 if __name__ == "__main__":
     texte_essai = cryptage_scytale2("scytale spartiate", 4 )
     print(texte_essai)
-    print(décryptage_scytale2_cle(texte_essai, 4))
+    print(décryptage_scytale2(texte_essai, "french"))
+    
