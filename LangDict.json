@@ -9,7 +9,46 @@
         "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
         "PP": [7.636, 0.901, 3.260, 3.669, 14.715, 1.066, 0.866, 0.737, 7.529, 0.613, 0.074, 5.456, 2.968, 7.095, 5.796, 2.521, 1.362, 6.693, 7.948, 7.244, 6.311, 1.838, 0.049, 0.427, 0.128, 0.326],
         "IC": 0.065,
-        "tetragrams": ["TION", "MENT", "ELLE", "DANS", "ETTE", "POUR", "IONS", "PRES", "PLUS", "AITN", "ENTI", "SANS", "TOUT", "CEUX", "ETRE", "DONT", "FAIT", "ETTE", "SONT", "LEUR", "BIEN", "ETAI", "AVEC", "SONT", "ESSE", "QUEL", "AUSS", "PEND", "COMM", "NOUS", "VOUS", "DEUX", "CELA", "TRES", "SOUS", "FAIS", "DIRE", "PEUT", "CELE", "DEPU", "CECI", "AVAI", "TOUS", "CETT", "MAIN", "MEMA", "AURA", "QUAN", "RIEN", "DITE", "EST"]
+        "tetragrams": ["TION", "MENT", "ELLE", "DANS", "ETTE", "POUR", "IONS", "PRES", "PLUS", "AITN", "ENTI", "SANS", "TOUT", "CEUX", "ETRE", "DONT", "FAIT", "ETTE", "SONT", "LEUR", "BIEN", "ETAI", "AVEC", "SONT", "ESSE", "QUEL", "AUSS", "PEND", "COMM", "NOUS", "VOUS", "DEUX", "CELA", "TRES", "SOUS", "FAIS", "DIRE", "PEUT", "CELE", "DEPU", "CECI", "AVAI", "TOUS", "CETT", "MAIN", "MEMA", "AURA", "QUAN", "RIEN", "DITE", "EST"],
+        "lettres seules impossibles": 
+        [
+            "B", "E", "F", "G", "H", "I", "K", "P", "Q", "R", "U", "V", "W", "X", "Z"
+            ],
+            
+        "bigrammes impossibles": 
+        ["AA", "HH", "JJ", "KK", "QQ", "VV", "WW", "XX", "YY"],
+
+        "mots deux lettre possibles": 
+        [
+            "AI", "AS", "AU", "CA", "CE", "CI", "DE", "DU", "EN", "ES", "ET", 
+            "EU", "IL", "JE", "LA", "LE", "LU", "MA", "ME", "NE", "NI", "ON", "OR", 
+            "OU", "SA", "SE", "SI", "TA", "TE", "TU", "UN", "VA", "VU"
+            ],
+        "mots_trois_lettres_possible": 
+        [
+            "AGE", "AIR", "AME", "ANE", "ARC", "AUX", "AXE", "BAC", "BAL", 
+            "BAR", "BAS", "BAT", "BEC", "BEL", "BLE", "BOA", "BOL", "BON", 
+            "BUS", "BUT", "CAP", "CAR", "CEP", "CES", "CIL", "CLE", "COQ", 
+            "COR", "COU", "DES", "DIS", "DIT", "DIX", "DOC", "DON", "DOS", 
+            "DOT", "DUC", "DUO", "DUR", "EAU", "ECU", "EGO", "ELU", "EPI", 
+            "EST", "ETE", "EUS", "EUT", "EUX", "FER", "FEU", "FIA", "FIL", 
+            "FIS", "FIT", "FOI", "FOU", "FUT", "GAI", "GAZ", "GEL", "GYM", 
+            "ICI", "IDE", "ILE", "ION", "IRA", "JET", "JEU", "JUS", "LAC", 
+            "LAS", "LES", "LIA", "LIE", "LIN", "LIS", "LIT", "LOI", "LOT", 
+            "LUE", "LUI", "LUS", "LUT", "LYS", "MAL", "MAS", "MAT", "MER", 
+            "MES", "MET", "MIS", "MIT", "MOI", "MON", "MOT", "MOU", "MUA", 
+            "MUE", "MUR", "MUS", "NEE", "NET", "NEZ", "NIA", "NIE", "NID", 
+            "NOM", "NON", "NOS", "NUE", "NUL", "NUS", "ODE", "OIE", "ONT", 
+            "OSA", "OSE", "OTA", "OTE", "OUI", "PAR", "PAS", "PEU", "PIC", 
+            "PIS", "PLI", "PLU", "POT", "PRE", "PRO", "PSY", "PUA", "PUE", 
+            "PUR", "PUS", "PUT", "QUE", "QUI", "RAS", "RAT", "RAZ", "REZ", 
+            "RIA", "RIE", "RIT", "RIZ", "ROC", "ROI", "ROT", "RUE", "SAC", 
+            "SAS", "SEC", "SEL", "SES", "SET", "SIX", "SKI", "SOI", "SOL", 
+            "SON", "SOT", "SOU", "SUE", "SUD", "SUR", "TAS", "TEL", "TES", 
+            "TIR", "TOI", "TON", "TRI", "TUE", "TUS", "TUT", "UNE", "UNI", 
+            "USE", "VAS", "VIA", "VIE", "VIF", "VIL", "VIN", "VIS", "VIT", 
+            "VOL", "VOS", "VUE", "VUS", "WEB", "ZOO"
+        ]
     },
     "german": {
         "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
