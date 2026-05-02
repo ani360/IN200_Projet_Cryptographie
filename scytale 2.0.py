@@ -52,9 +52,10 @@ def calcul_IC(txt, lang):
 
 # fonction de décryptage en bruteforce 
 
-def décryptage_scytale2(texte_encodé, lang):
+def décryptage_scytale2(texte_encodé):
     messages_par_clé = {}
     clé_maximale = len(texte_encodé)-1
+    IC_text = calcul_IC(texte_encodé)
     une_lettre = frozenset(LangDictJson[lang]["lettres seules impossibles"])
     bigrammes = frozenset(LangDictJson[lang]["bigrammes impossibles"])
     dico_deux_lettres = frozenset(LangDictJson[lang]["mots deux lettres possibles"])
