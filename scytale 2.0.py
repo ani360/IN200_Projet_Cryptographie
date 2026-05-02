@@ -64,6 +64,7 @@ def décryptage_scytale2(texte_encodé, lang):
         texte_du_pas= décryptage_scytale2_cle(texte_encodé, k)
         messages_par_clé[k] = texte_du_pas
 
+
 if __name__ == "__main__":
     texte_essai = cryptage_scytale2("scytale spartiate", 4 )
     print(texte_essai)
