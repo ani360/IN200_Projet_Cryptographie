@@ -16,50 +16,6 @@ class caesar :
         self.input = input
         if type(input) != str :
             ("Input must be a string")
-        self.dict_freq : dict = {
-    "french": [
-        7.636, 0.901, 3.260, 3.669, 14.715, 1.066, 0.866, 0.737, 7.529, 0.613,
-        0.074, 5.456, 2.968, 7.095, 5.796, 2.521, 1.362, 6.693, 7.948, 7.244,
-        6.311, 1.838, 0.049, 0.427, 0.128, 0.326
-    ],
-    "english": [
-        8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153,
-        0.772, 4.025, 2.406, 6.749, 7.507, 1.929, 0.095, 5.987, 6.327, 9.056,
-        2.758, 0.978, 2.360, 0.150, 1.974, 0.074
-    ],
-    "spanish": [
-        11.525, 2.215, 4.019, 5.010, 12.181, 0.692, 1.768, 0.703, 6.247, 0.443,
-        0.011, 4.967, 3.157, 6.712, 8.683, 2.510, 0.877, 6.871, 7.977, 4.632,
-        2.927, 1.138, 0.017, 0.215, 1.008, 0.467
-    ],
-    "italian": [
-        11.745, 0.927, 4.501, 3.736, 11.792, 1.113, 0.473, 0.640, 10.143, 0.011,
-        0.009, 6.510, 2.512, 6.883, 9.832, 3.056, 0.505, 6.367, 4.981, 5.623,
-        3.011, 2.097, 0.033, 0.003, 0.020, 1.181
-    ],
-    "german": [
-        6.516, 1.886, 2.732, 5.076, 16.396, 1.656, 3.009, 4.577, 7.550, 0.268,
-        1.417, 3.437, 2.534, 9.776, 2.594, 0.670, 0.018, 7.003, 7.270, 6.154,
-        4.166, 0.846, 1.921, 0.034, 0.039, 1.134
-    ],
-    "neerlandais": [
-        7.486, 1.584, 1.242, 5.933, 18.91, 0.805, 3.403, 2.380, 11.99, 1.46,
-        2.248, 3.568, 2.213, 10.03, 6.063, 1.57, 0.009, 6.411, 3.73, 6.79,
-        1.99, 2.85, 1.52, 0.036, 0.035, 1.39
-    ],
-    "suedois": [
-        9.383, 1.535, 1.486, 4.702, 10.149, 2.027, 2.862, 2.090, 5.817, 0.614,
-        3.140, 5.275, 3.471, 8.542, 4.484, 1.839, 0.020, 8.431, 6.590, 7.691,
-        1.919, 2.415, 0.142, 0.159, 0.708, 0.070
-    ],
-    "russian": [ # Alphabet cyrillique (33 lettres)
-        8.01, 1.59, 4.54, 1.70, 2.98, 8.45, 0.04, 0.94, 1.65, 7.35, 1.21, 3.49, 
-        4.40, 3.21, 6.70, 10.97, 2.81, 4.73, 5.47, 6.26, 2.62, 0.26, 0.97, 0.48, 
-        1.44, 0.73, 0.36, 0.04, 1.90, 1.74, 0.03, 1.10, 2.01
-    ]
-}
-        #hardcode le dico des freq des langue pr l'instant mais go le mettre dans un json avec les autres dico après.
-
     def encode(self, inc : int) -> str:
         output : str = ''
         for char in self.input :
@@ -96,6 +52,7 @@ class caesar :
         return(output)
 
     def decrypt_freq(self, lang : str) -> int: #trouve la clée corresspondante par analyse de fréquence.
+        self.dict_freq : dict = {lang : LangDictJson[lang]['PP']}
         l = float(len(self.input))
         score : list = [0, 100]
         for i in range (26):
@@ -120,12 +77,25 @@ def Calcul_IC(input : str, alphabet : str, pas : int) -> int : #calcul de l'indi
         somf.append(sum(map(somme, lettres))/float(n*(n+1))) #calcul de l'indice
     return(sum(somf)/float(len(somf))) #return moyenne des indices
 
-def sanitize(input : str)->str : #virer les accents
+def remake_lowcase(txt1 : str, txt2 :str) -> str : #note : does not work well with french_extended bcse of accents.
+    txt1_2 = ''
+    for char in txt1 :
+        if char.isalpha() or char.isspace() :
+            txt1_2 +=char
+    L=[]
+    for i in range(len(txt1_2)) :
+        if txt1_2[i].isalpha() and txt1_2[i].islower():
+            L.append(txt2[i].lower())
+        else : 
+            L.append(txt2[i])
+    return("".join(L))
+
+def sanitize(input : str)->str : #virer les charspec
     normalized = unicodedata.normalize('NFD', input) #remplace é par e'
     result = "".join(char for char in normalized if unicodedata.category(char) != 'Mn')
     final_list_char = []
     for char in result:
-        if char.isalpha() or char.isspace():
+        if char.isalnum() or char.isspace():
             final_list_char.append(char.upper())
     return "".join(final_list_char)
 
@@ -157,38 +127,51 @@ def generate_vigenere_decode_table(lang):
         vigenere_map[key_char] = row_map
     return(vigenere_map)
 
-def vigenere_encode(input : str, key : str, lang : str) -> str:
+def vigenere_encode(input : str, key : str, lang : str, keep_lowercase : bool) -> str:
         #example : cipher_letter = vigenere_table[key_letter][plain_letter]
         vigenere_table = generate_vigenere_encode_table(lang)
         encoded : str = ""
         key : str = "".join(char for char in key.upper() if char.isalpha())
         i :int = 0
-        plaintext = sanitize(input)
+        if lang == "french_extended" :
+            plaintext = "".join(char for char in input.upper() if char.isalnum() or char.isspace())
+        else :
+            plaintext = sanitize(input)
         for char in plaintext :
             if char.isalpha():
                 encoded += vigenere_table[key[i%(len(key))]][char]
                 i+=1
             else :
                 encoded += char
+        if keep_lowercase :
+            encoded = remake_lowcase(input, encoded)
         return(encoded)
 
-def vigenere_decode(input : str, key : str, lang : str) -> str:
+def vigenere_decode(input : str, key : str, lang : str, keep_lowercase : bool) -> str:
         #example : cipher_letter = vigenere_table[key_letter][plain_letter]
         vigenere_table = generate_vigenere_decode_table(lang)
         decoded : str = ""
         key : str = "".join(char for char in key.upper() if char.isalpha())
         i :int = 0
-        plaintext = sanitize(input)
+        if lang == "french_extended" :
+            plaintext = "".join(char for char in input.upper() if char.isalnum() or char.isspace())
+        else :
+            plaintext = sanitize(input)
         for char in plaintext :
             if char.isalpha():
                 decoded += vigenere_table[key[i%(len(key))]][char]
                 i+=1
             else :
                 decoded += char
+        if keep_lowercase :
+            decoded = remake_lowcase(input, decoded)
         return(decoded)
 
-def vigenere_decrypt(input : int, lang : str) -> str:
-    alphabet : str = LangDictJson[lang]["alphabet"]
+def vigenere_decrypt(input : int, lang : str, keep_lowercase : bool) -> str:
+    if lang == "french_extended":
+        alphabet : str = LangDictJson["french"]["alphabet"]
+    else :
+        alphabet : str = LangDictJson[lang]["alphabet"]
     IC : float = LangDictJson[lang]["IC"]
     L : int = len(alphabet)
     plaintext : str = sanitize(input)
@@ -200,19 +183,40 @@ def vigenere_decrypt(input : int, lang : str) -> str:
     indices_cles = [caesar(bout).decrypt_freq(lang) for bout in fractionne]
     #indices_cles = [caesar_decrypt_freq(bout, lang) for bout in fractionne] #syntaxe attendue pour le decryptage par analyse de freq du code de cesar.
     key = ''.join(([alphabet[(L - i) % L] for i in indices_cles]))
-
-    return(f'key = {key}, text = {vigenere_decode(input, key, lang)}')
+    
+    decrypted = vigenere_decode(input, key, lang, False)
+    if keep_lowercase :
+        decrypted = remake_lowcase(input, decrypted)
+    
+    return(f'key = {key}, text = {decrypted}')
 
 if __name__ == "__main__": #DECRYPTER WON'T WORK EVERY TIME ESPECIALLY WITH LONGER KEYS OR TEXTS WITH UNEVEN LETTER DISTRIBUTION.
+    #raw_texts
     frtxt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
     entxt = "Letter frequency is the number of times letters of the alphabet appear on average in written language. Letter frequency analysis dates back to the Arab mathematician Al-Kindi"
-    #print(generate_vigenere_encode_table('english'))
-    FRencoded = vigenere_encode(frtxt, 'DEGAULLE', "french")
-    #ENencoded = vigenere_encode(entxt, 'KINDI', "english")
-    print(FRencoded)
-    #print(ENencoded)
-    print(vigenere_decode(FRencoded, 'DEGAULLE', 'french'))
-    #print(vigenere_decode(ENencoded, 'KINDI', 'english'))
-    print(vigenere_decrypt(FRencoded, "french"))
-    #print(vigenere_decrypt(ENencoded, "english"))
+    frext = "Le Comte de Monte-Cristo est un roman d'Alexandre Dumas, écrit avec la collaboration d'Auguste Maquet et dont la publication commence pendant l'été 1844. Il est partiellement inspiré du récit d'un fait divers, « Le Diamant et la Vengeance » (voir Pierre Picaud), publié en 1838 dans les Mémoires tirés des archives de la police (tome V, chapitre LXXIV), mémoires apocryphes rédigés en large partie par l'écrivain Étienne-Léon de Lamothe-Langon à partir des notes de Jacques Peuchet, archiviste de la préfecture de police."
     
+    #Test for lang = "french"
+    """
+    FRencoded = vigenere_encode(frtxt, 'DEGAULLE', "french", True)
+    print(FRencoded)
+    print(vigenere_decode(FRencoded, 'DEGAULLE', "french", True))
+    print(vigenere_decrypt(FRencoded, "french", True))
+    """
+    
+    #test for lang = "english"
+    """
+    #print(generate_vigenere_encode_table("english"))
+    ENencoded = vigenere_encode(entxt, 'KINDI', "english", True)
+    print(ENencoded)
+    print(vigenere_decode(ENencoded, 'KINDI', "english", True))
+    print(vigenere_decrypt(ENencoded, "english", True))
+    """
+
+    #I advise not to use keep_lowercase = True with french_extended as it can mess things up.
+    """
+    test1 = vigenere_encode(frext, 'DEGAULLE', "french_extended", False)
+    print(test1)
+    print(vigenere_decode(test1, 'DEGAULLE', "french_extended", False))
+    print(vigenere_decrypt(test1, "french_extended", False))
+    """

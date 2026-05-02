@@ -96,8 +96,12 @@ def décryptage_scytale2(texte_encodé):
 
 
 
+
 if __name__ == "__main__":
     texte_essai = cryptage_scytale2("scytale spartiate", 4 )
+    texte_essai2 = cryptage_scytale2("le but de ce projet est de programmer des algorithmes", 2) 
     print(texte_essai)
+    print(texte_essai2)
     print(décryptage_scytale2(texte_essai, "french"))
+    print(décryptage_scytale2(texte_essai2, "french"))
     
