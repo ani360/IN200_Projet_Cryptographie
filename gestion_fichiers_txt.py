@@ -14,11 +14,11 @@ def conversion_texte(path_fichier_entrée):
     return texte
 
 #cette fonction permet quand a elle de prendre le texte rendu par une fonction de cryptage/décryptage
-#et d'en faire une fichier .txt ou de l'insérer a la fin d'un fichier .txt, une entête pourra être écrite au dessus du texte
+#et d'en faire une fichier .txt une entête pourra être écrite au dessus du texte
 
 
 def écriture_fichier_sortie(path_fichier_output, texte_output, entête): 
-    fichier_output = open(path_fichier_output, 'a')
+    fichier_output = open(path_fichier_output, 'w')
     longueur_texte = len(texte_output)
     if longueur_texte <= 100 :
         fichier_output.write('\n' + entête + ":" + '\n' + '\n' + texte_output + '\n')
