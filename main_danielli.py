@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 script_dir = Path(__file__).parent
-LangDict_path = script_dir.parent / "LangDict.json"
+LangDict_path = script_dir / "LangDict.json"
 
 with open(LangDict_path, 'r', encoding='utf-8') as f: 
     LangDictJson = json.load(f)
@@ -17,10 +17,12 @@ def sanitize(input_str):
             final_list_char.append(char.upper())
     return "".join(final_list_char)
 
-def caesar(message, cle, alphabet):
+def caesar(message, cle, langue):
+    alphabet = LangDictJson[langue]["alphabet"]
     message_chiffre = ""
+    message_propre = sanitize(message)
     taille = len(alphabet)
-    for letter in message:
+    for letter in message_propre:
         if letter in alphabet:
             index = alphabet.find(letter)
             nouvel_index = (index + cle) % taille
@@ -29,11 +31,12 @@ def caesar(message, cle, alphabet):
             message_chiffre += letter
     return message_chiffre
 
-def brute_force(message, alphabet):
+def brute_force(message, langue):
+    alphabet = LangDictJson[langue]["alphabet"]
     tentatives = {}
     message_propre = sanitize(message)
     for k in range(len(alphabet)):
-        tentatives[k] = caesar(message_propre, -k, alphabet)
+        tentatives[k] = caesar(message_propre, -k, langue)
     return tentatives
 
 def analyse_de_frequence(message, langue):
@@ -56,7 +59,7 @@ def genere_toutes_les_scores(message, langue):
         return {}
     scores = {}
     for cle_test in range(len(alphabet)):
-        test_texte = caesar(message_propre, -cle_test, alphabet)
+        test_texte = caesar(message_propre, -cle_test, langue)
         diff = 0
         for i in range(len(alphabet)):
             lettre = alphabet[i]
@@ -74,7 +77,7 @@ def decrypt_freq(message, langue):
         return 0
     score = [0, 500]
     for cle_test in range(len(alphabet)):
-        test = caesar(message_propre, -cle_test, alphabet)
+        test = caesar(message_propre, -cle_test, langue)
         diff = sum(abs(b - dict_freq_json[a]) for a, b in enumerate([100 * test.count(lettre) / l for lettre in alphabet]))
         if diff < score[1]:
             score = [cle_test, diff]
@@ -104,17 +107,16 @@ def decrypt_freq(input : str, lang : str) -> int: #trouve la clée corresspondan
 #pour le main() je t'avais dit d'oublier, tu ne demande rien a l'utilisateur tu code juste les fonction je veut pas voir un input()
 #qd tu fait  un test pour run ton code tu met : 
 if __name__ == "__main__":
-    langue = "french"
-    alphabet = LangDictJson[langue]["alphabet"]
-    phrase_a_crypter = sanitize("ussop,est,un. gros blaireau .") 
-    phrase_codee = caesar(phrase_a_crypter, 10, alphabet)
+    lang = "french"
+    phrase_a_crypter = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement." 
+    phrase_codee = caesar(phrase_a_crypter, 10, lang)
     print("phrase codée :", phrase_codee)
-    cle_detectee = decrypt_freq(phrase_codee, langue)
+    cle_detectee = decrypt_freq(phrase_codee, lang)
     print("Clé détectée par l'analyse de fréquence ", cle_detectee)
-    message_clair = caesar(phrase_codee, -cle_detectee, alphabet)    
+    message_clair = caesar(phrase_codee, -cle_detectee, lang)    
     print("Message décrypté :", message_clair)
-    test1=analyse_de_frequence(phrase_a_crypter,langue)
+    test1=analyse_de_frequence(phrase_a_crypter,lang)
     print(test1)
-    test2=genere_toutes_les_scores(phrase_codee,langue)
+    test2=genere_toutes_les_scores(phrase_codee,lang)
     print(test2)  
         
