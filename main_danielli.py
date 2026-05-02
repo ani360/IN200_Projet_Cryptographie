@@ -38,7 +38,8 @@ def brute_force(message, langue):
     for k in range(len(alphabet)):
         tentatives[k] = caesar(message_propre, -k, langue)
     return tentatives
-
+"""
+#Cette fonction est INUTILE.
 def analyse_de_frequence(message, langue):
     message_propre=sanitize(message) 
     dict_freq = LangDictJson[langue]['PP']
@@ -50,6 +51,8 @@ def analyse_de_frequence(message, langue):
         frequences_apparition_lettres[lettre]=(nombre_apparition/taille)*100
     return frequences_apparition_lettres
 
+
+#Celle là aussi (sérieusement pourquoi ???).
 def genere_toutes_les_scores(message, langue):
     alphabet = LangDictJson[langue]['alphabet']
     dict_freq_json = LangDictJson[langue]['PP']
@@ -67,6 +70,7 @@ def genere_toutes_les_scores(message, langue):
             diff += abs(freq_texte - dict_freq_json[i])
         scores[cle_test] = round(diff, 2)
     return scores
+"""
 
 def decrypt_freq(message, langue):
     alphabet = LangDictJson[langue]['alphabet']
@@ -81,7 +85,7 @@ def decrypt_freq(message, langue):
         diff = sum(abs(b - dict_freq_json[a]) for a, b in enumerate([100 * test.count(lettre) / l for lettre in alphabet]))
         if diff < score[1]:
             score = [cle_test, diff]
-    return score[0]
+    return f"Clé détectée par l'analyse de fréquence : {score[0]} ; Message décrypté :{caesar(phrase_codee, -score[0], lang)}"
 
     
     
@@ -104,19 +108,12 @@ def decrypt_freq(input : str, lang : str) -> int: #trouve la clée corresspondan
         return score[0]
 """
 
-#pour le main() je t'avais dit d'oublier, tu ne demande rien a l'utilisateur tu code juste les fonction je veut pas voir un input()
-#qd tu fait  un test pour run ton code tu met : 
 if __name__ == "__main__":
     lang = "french"
     phrase_a_crypter = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement." 
     phrase_codee = caesar(phrase_a_crypter, 10, lang)
     print("phrase codée :", phrase_codee)
-    cle_detectee = decrypt_freq(phrase_codee, lang)
-    print("Clé détectée par l'analyse de fréquence ", cle_detectee)
-    message_clair = caesar(phrase_codee, -cle_detectee, lang)    
-    print("Message décrypté :", message_clair)
-    test1=analyse_de_frequence(phrase_a_crypter,lang)
-    print(test1)
-    test2=genere_toutes_les_scores(phrase_codee,lang)
-    print(test2)  
+    print(decrypt_freq(phrase_codee, lang))
+    #print(analyse_de_frequence(phrase_a_crypter,lang))
+    #print(genere_toutes_les_scores(phrase_codee,lang))
         
