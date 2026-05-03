@@ -1,9 +1,9 @@
 # version historiquement conforme de la scytale (déchiffrable !!)
 from math import log 
 import json
-from random import randint
 from pathlib import Path
 from Sanitizer import sanitize
+from Sanitizer import sanitize_2
 
 script_dir = Path(__file__).parent
 file_path = script_dir / "LangDict.json"
@@ -22,16 +22,15 @@ def conversion_texte(path_fichier_entrée):
     return texte
 
 #cette fonction permet quand a elle de prendre le texte rendu par une fonction de cryptage/décryptage
-#et d'en faire une fichier .txt ou de l'insérer a la fin d'un fichier .txt, une entête pourra être écrite au dessus du texte
+#et d'en faire une fichier .txt ou de l'insérer a la fin d'un fichier .txt
 
 
-def écriture_fichier_sortie(path_fichier_output, texte_output, entête): 
+def écriture_fichier_sortie(path_fichier_output, texte_output): 
     fichier_output = open(path_fichier_output, 'w')
     longueur_texte = len(texte_output)
     if longueur_texte <= 100 :
-        fichier_output.write('\n' + entête + ":" + '\n' + '\n' + texte_output + '\n')
-    else : 
-        fichier_output.write('\n' + entête + ":" + '\n' + '\n')
+        fichier_output.write(texte_output + '\n')
+    else :
         for n in range((longueur_texte//100)):
             fichier_output.write(texte_output[(n*100):((n+1)*100)] + '\n')
         fichier_output.write(texte_output[(longueur_texte//100)*100:] + '\n')
@@ -39,15 +38,21 @@ def écriture_fichier_sortie(path_fichier_output, texte_output, entête):
 
 
 
-
-
-
-
-def cryptage_scytale2(texte, clé): 
+def cryptage_scytale2(texte, clé, accents, maj):
     nombre_colonnes = (len(texte)+clé-1)//clé
     ruban_sur_baton =[[] for k in range(clé)]
     message_encodé =""
-    texte = sanitize(texte)
+    if accents == "clean" :
+        if maj == "maj"
+            texte = sanitize(texte)
+        else :
+            texte = sanitize_2(texte)
+    else : 
+        texte = "".join([char for char in texte if char.isalpha() or char.isspace()])
+        if maj =="maj":
+            texte = texte.upper()
+        else : 
+            texte = texte.lower()
     for n in range (clé) : 
         for k in range (nombre_colonnes*n, nombre_colonnes*(n+1)):
             if k< len(texte) :
@@ -82,69 +87,14 @@ def calcul_IC(txt, lang):
     
     return (somme/((nbre_caracteres)**2 - nbre_caracteres))
 
-# fonction de décryptage en bruteforce 
-
-def décryptage_scytale2(texte_encodé):
-    messages_par_clé = {}
-    une_lettre = frozenset(LangDictJson["french"]["lettres seules impossibles"])
-    bigrammes = frozenset(LangDictJson["french"]["bigrammes impossibles"])
-    dico_deux_lettres = frozenset(LangDictJson["french"]["mots deux lettres possibles"])
-    dico_trois_lettres = frozenset(LangDictJson["french"]["mots trois lettres possibles"])
-    
-    for clé in range(2, len(texte_encodé)):
-        messages_par_clé[clé] = décryptage_scytale2_cle(texte_encodé, clé).split()
-    
-    b = frozenset(messages_par_clé.keys())
-    for clé in b :
-        if frozenset(messages_par_clé[clé]).isdisjoint(une_lettre) == False :
-                del messages_par_clé[clé]
-    
-    b = frozenset(messages_par_clé.keys())         
-    for clé in b :
-        for mot in messages_par_clé[clé] :
-            if {mot[i:i+2] for i in range(len(mot)-1)}.isdisjoint(bigrammes) == False :       
-                    del messages_par_clé[clé]
-                    break
-
-    b = frozenset(messages_par_clé.keys())            
-    for clé in b :
-        for mot in messages_par_clé[clé] :
-            if len(mot) ==2 :
-                if mot not in dico_deux_lettres :
-                    del messages_par_clé[clé]
-                    break
-    b = frozenset(messages_par_clé.keys())
-    for clé in b :
-        for mot in messages_par_clé[clé]:
-            if len(mot)==3 :
-                if mot not in dico_trois_lettres :
-                    del messages_par_clé[clé]
-                    break
-    
-    print(messages_par_clé)
 
 
-def calcul_score(liste_mots, lang) :
+def calcul_score_tetra(texte, lang) :
     trétragrammes= frozenset(LangDictJson[lang]["tetragrams"])
-    trigrammes = frozenset(LangDictJson[lang]["trigrammes courants"])
     itérations_par_tétra = {}
-    itérations_par_trig = {}
-    nombre_trig = 0
     nombre_tetra = 0
-    for trig in trigrammes :
-        itérations_par_trig[trig] = 0
-    
     for tetra in trétragrammes :
-        itérations_par_tétra[tetra] = 0
-    
-   
-
-    for mot in liste_mots :
-        if 4 <= len(mot) :
-            for n in range(len(mot)-3) :
-                nombre_tetra += 1
-                if mot[n:n+4] in trétragrammes: 
-                    itérations_par_tétra[mot[n:n+4]] += 1
+        itérations_par_tétra[tetra] = texte.count(tetra)
     if nombre_tetra ==0 :
         score_tetra = 0
     else : 
@@ -152,18 +102,10 @@ def calcul_score(liste_mots, lang) :
 
     return score_tetra
 
-        
-
-
-
-
-         
-
-
-
 
     
-def décryptage_scytale_log(path_output, entête, texte_encodé, lang) :
+    
+def décryptage_scytale_log( texte_encodé, lang) :
     bigrammes = frozenset(LangDictJson[lang]["bigrammes impossibles"])
     messages_par_clé = {}
     scores_tetra = {}
@@ -189,15 +131,31 @@ def décryptage_scytale_log(path_output, entête, texte_encodé, lang) :
         score_max = max([score for score in scores_tetra.values() if score != 0])
         textes_output = [" ".join(messages_par_clé[clé]) for clé in scores_tetra.keys() if scores_tetra[clé]== score_max]
         for texte in textes_output :
-            écriture_fichier_sortie("C:/Users/Utilisateur/Desktop/IN200/testdc.txt", texte, entête)
+            print(texte)
     else :
-        texte_output = " ".join(messages_par_clé[clés_éligibles[0]])
-        écriture_fichier_sortie("C:/Users/Utilisateur/Desktop/IN200/testdc.txt", texte_output, entête)
+        print(" ".join(messages_par_clé[clés_éligibles[0]]))
+        
 
+def craquage_scytale(texte_encodé, lang): 
+    trigrammes = frozenset(LangDictJson[lang]["trigrams"])
+    taille_texte = len(texte_encodé)
+    scores_texte_avec_clé = []
+    scores = []
+
+    for clé in range(2, taille_texte - 1): 
+        texte_clé = décryptage_scytale2_cle(texte_encodé, clé)
+        score_clé = sum(texte_clé.count(trig) for trig in trigrammes)
+        if score_clé >0 : 
+            scores.append(score_clé)
+            scores_texte_avec_clé.append([score_clé, clé, texte_clé])
+
+    for texte in scores_texte_avec_clé :
+        if texte[0] == max(scores) :
+            print("score : "+ str(texte[0]) +", clé : "+ str(texte[1]) + ", texte décrypté : "+ texte[2])
 
 
 if __name__ == "__main__":
-    texte_essai = cryptage_scytale2("scytale spartiate", 4 )
     texte_essai2 = cryptage_scytale2("On peut tous affirmer que nous avons un but dans la vie, un objectif a atteindre pour donner un sens a notre existence afin de la considérer accomplie. Cette finalité est a l’unanimité considérée comme le bonheur. La morale est une une loi universelle qui définit la raison chez les humains, présente dans nos pensées et qui définit ce qui est juste et injuste, bon ou mauvais, nous sommes tout de même libres d’y obéir mais elle fonde le comportement idéal de l’homme", 5) 
-    print(texte_essai2)
-    décryptage_scytale_log("C:/Users/Utilisateur/Desktop/IN200/essaidc.txt", "voici un potentiel texte décrypté", texte_essai2, "french")
+    #print(décryptage_scytale2_cle(texte_essai2, 5))
+    #décryptage_scytale_log("C:/Users/Utilisateur/Desktop/IN200/essaidc.txt", "voici un potentiel texte décrypté", texte_essai2, "french")
+    craquage_scytale(texte_essai2, "french")
