@@ -2,39 +2,13 @@
 from math import log 
 import json
 from pathlib import Path
-from Sanitizer import sanitize
-from Sanitizer import sanitize_2
+from Sanitizer import sanitize, sanitize_2
 
 script_dir = Path(__file__).parent
 file_path = script_dir / "LangDict.json"
 
 with open(file_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
-
-def conversion_texte(path_fichier_entrée):
-    fichier_entrée = open(path_fichier_entrée, 'r')
-    texte = ""
-    ligne = fichier_entrée.readline()
-    while ligne != '': 
-        texte += ligne
-        ligne = fichier_entrée.readline()
-    fichier_entrée.close()
-    return texte
-
-#cette fonction permet quand a elle de prendre le texte rendu par une fonction de cryptage/décryptage
-#et d'en faire une fichier .txt ou de l'insérer a la fin d'un fichier .txt
-
-
-def écriture_fichier_sortie(path_fichier_output, texte_output): 
-    fichier_output = open(path_fichier_output, 'w')
-    longueur_texte = len(texte_output)
-    if longueur_texte <= 100 :
-        fichier_output.write(texte_output + '\n')
-    else :
-        for n in range((longueur_texte//100)):
-            fichier_output.write(texte_output[(n*100):((n+1)*100)] + '\n')
-        fichier_output.write(texte_output[(longueur_texte//100)*100:] + '\n')
-    fichier_output.close()
 
 
 
@@ -43,15 +17,15 @@ def cryptage_scytale2(texte, clé, accents, maj):
     ruban_sur_baton =[[] for k in range(clé)]
     message_encodé =""
     if accents == "clean" :
-        if maj == "maj"
+        if maj == "maj" :
             texte = sanitize(texte)
-        else :
-            texte = sanitize_2(texte)
+        if maj == "min" :
+            texte = sanitize_2(texte).lower
     else : 
         texte = "".join([char for char in texte if char.isalpha() or char.isspace()])
         if maj =="maj":
             texte = texte.upper()
-        else : 
+        if maj =="min":
             texte = texte.lower()
     for n in range (clé) : 
         for k in range (nombre_colonnes*n, nombre_colonnes*(n+1)):
@@ -76,16 +50,6 @@ def décryptage_scytale2_cle(text, cle):
         k+=1
     return(message_decrypte)
 
-# fonction de calcul de l'IC pour un texte et une langue donnée : 
-def calcul_IC(txt, lang): 
-    nbre_caracteres = len(txt)
-    alphabt = LangDictJson[lang]['alphabet']
-    somme = 0
-    for char in alphabt : 
-        B= txt.count(char)
-        somme += (B**2 - B )
-    
-    return (somme/((nbre_caracteres)**2 - nbre_caracteres))
 
 
 
@@ -136,15 +100,18 @@ def décryptage_scytale_log( texte_encodé, lang) :
         print(" ".join(messages_par_clé[clés_éligibles[0]]))
         
 
-def craquage_scytale(texte_encodé, lang): 
+def craquage_scytale(texte_encodé, lang, maj): 
     trigrammes = frozenset(LangDictJson[lang]["trigrams"])
     taille_texte = len(texte_encodé)
     scores_texte_avec_clé = []
     scores = []
 
     for clé in range(2, taille_texte - 1): 
-        texte_clé = décryptage_scytale2_cle(texte_encodé, clé)
-        score_clé = sum(texte_clé.count(trig) for trig in trigrammes)
+        if maj == "maj":
+            texte_clé = décryptage_scytale2_cle(texte_encodé, clé).upper()
+        else :
+            texte_clé = décryptage_scytale2_cle(texte_encodé, clé)
+        score_clé = sum(texte_clé.upper().count(trig) for trig in trigrammes)
         if score_clé >0 : 
             scores.append(score_clé)
             scores_texte_avec_clé.append([score_clé, clé, texte_clé])
@@ -155,7 +122,8 @@ def craquage_scytale(texte_encodé, lang):
 
 
 if __name__ == "__main__":
-    texte_essai2 = cryptage_scytale2("On peut tous affirmer que nous avons un but dans la vie, un objectif a atteindre pour donner un sens a notre existence afin de la considérer accomplie. Cette finalité est a l’unanimité considérée comme le bonheur. La morale est une une loi universelle qui définit la raison chez les humains, présente dans nos pensées et qui définit ce qui est juste et injuste, bon ou mauvais, nous sommes tout de même libres d’y obéir mais elle fonde le comportement idéal de l’homme", 5) 
+    texte_essai2 = cryptage_scytale2("On peut tous affirmer que nous avons un but dans la vie, un objectif a atteindre pour donner un sens a notre existence afin de la considérer accomplie. Cette finalité est a l’unanimité considérée comme le bonheur. La morale est une une loi universelle qui définit la raison chez les humains, présente dans nos pensées et qui définit ce qui est juste et injuste, bon ou mauvais, nous sommes tout de même libres d’y obéir mais elle fonde le comportement idéal de l’homme",
+                                     5, "garder accents", "min") 
     #print(décryptage_scytale2_cle(texte_essai2, 5))
     #décryptage_scytale_log("C:/Users/Utilisateur/Desktop/IN200/essaidc.txt", "voici un potentiel texte décrypté", texte_essai2, "french")
-    craquage_scytale(texte_essai2, "french")
+    craquage_scytale(texte_essai2, "french_extended", "maj")

@@ -15,6 +15,6 @@ def sanitize_2(input : str)->str :
     final_list_char = []
     for char in result:
         if char.isalpha() or char.isspace():
-            final_list_char.append(char.lower())
+            final_list_char.append(char)
     return "".join(final_list_char)
 
