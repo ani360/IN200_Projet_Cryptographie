@@ -194,14 +194,6 @@ def décryptage_scytale_log(path_output, entête, texte_encodé, lang) :
         texte_output = " ".join(messages_par_clé[clés_éligibles[0]])
         écriture_fichier_sortie("C:/Users/Utilisateur/Desktop/IN200/testdc.txt", texte_output, entête)
 
-    
-    
-
-
-
-
-
-
 
 
 if __name__ == "__main__":

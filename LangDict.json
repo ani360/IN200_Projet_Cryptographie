@@ -48,7 +48,7 @@
             "ZH", "ZJ", "ZK", "ZM", "ZN", "ZP", "ZQ", "ZR", "ZS", 
             "ZT", "ZV", "ZW", "ZX", "IY", "YI", "YU", "YW"],
        
-        "trigrammes courants": [
+        "trigrams": [
             "ADE", "AGE", "AIS", "AIT", "AIR", "ALE", "AME", "ANE", "ANT",
             "ARE", "ASE", "ATE", "AVE", "AUX",
             "CEL", "CES", "CET", "COM", "CON", "COR",
