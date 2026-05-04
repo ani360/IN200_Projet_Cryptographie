@@ -1,6 +1,6 @@
 import random
 import time
-from Enigma import EnigmaMachine, LangDictJson, sanitize
+from logic.Enigma.Enigma import EnigmaMachine, LangDictJson, sanitize
 
 def generate_candidate_config(seed_val, n_rotors, n_cables, lang):
     random.seed(seed_val)

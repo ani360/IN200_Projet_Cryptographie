@@ -1,12 +1,13 @@
 import os, sys,json, requests, random, unicodedata, math, time
 from pathlib import Path
 from itertools import permutations, product
+from datetime import datetime
 #from caesar import caesar_decrypt_freq #serat dans le fichier du code de césar
 
 # Get the script dir
-script_dir = Path(__file__).parent
+script_dir = Path(__file__).resolve().parent
 
-LangDict_path = script_dir.parent / "LangDict.json"
+LangDict_path = script_dir.parent.parent / "LangDict.json"
 with open(LangDict_path, 'r', encoding='utf-8') as f: #file path, read, utf-8
     LangDictJson = json.load(f)
 
@@ -33,18 +34,21 @@ def save_config(data, filenameend="", overwrite=True):
     if overwrite:
         target_filename = f"{filename}.json"
     else:
-        target_filename = f"{filename}_{filenameend}.json"
-        if os.path.exists(os.path.join(folder, target_filename)):
-            yn : bool = int(input('Le fichier existe déjà voulez vous le remplacer (0 : oui ; 1 : non)'))
-            if yn == 1 :
-                return('Could not resolve config saving.')
+        timestamp = datetime.now().strftime("%Y%m%d_%Hh%M")
+        i = 1
+        filenameend = f"_{timestamp}_{i}"
+        target_filename = f"{filename}{filenameend}.json"
+        while os.path.exists(os.path.join(folder, target_filename)):
+            i += 1
+            filenameend = f"_{timestamp}_{i}"
+            
     filepath = os.path.join(folder, target_filename)
 
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     
-    print(f"Config saved to: {filepath}")
-    return filepath
+    #print(f"Config saved to: {filepath}")
+    return f"Config saved to: {filepath}"
 
 class rotor:
     def __init__(self,forward_map, lang):
@@ -181,21 +185,19 @@ def setup_generator(nrotor : int, ncables : int, lang, overwrite : bool) : #n = 
         char_a = available_chars.pop()
         char_b = available_chars.pop()
         data["cables"].append([char_a, char_b])
+    data["creation"] = time.time()
     
-    if not overwrite :
-        ending = input('name your folder : ')
-    else :
-        ending = ''
-
-    save_config(data, ending, overwrite)
-    pass
+    return(save_config(data, '', overwrite))
 
 #print(setup_generator(6, 8, 'french', True))
 
 if __name__ == "__main__":
-    txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+    #txt = "Le but dé cé projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens. Dans un premier temps, il faudra programmer en python le code de cesar, le chiffre de Vigenere ainsi que la scytale, et une substitution monoalphabetique generale. Toutes les descriptions peuvent etre trouves sur internet facilement."
+    lang = 'french'
+    print(setup_generator(3, 2, lang, False))
+    """txt = 'bonjour'
     txt = sanitize(txt)
-    encoded = EnigmaMachine('french').process_text(txt)
+    encoded = EnigmaMachine(lang).process_text(txt)
     print(encoded)
-    decoded = EnigmaMachine('french').process_text(encoded)
-    print(decoded)
+    decoded = EnigmaMachine(lang).process_text(encoded)
+    print(decoded)"""

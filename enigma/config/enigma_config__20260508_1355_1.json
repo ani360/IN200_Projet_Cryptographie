@@ -1,0 +1,57 @@
+{
+    "rotors": [
+        {
+            "id": 1,
+            "name": "Custom Rotor 1",
+            "wiring": "CKLUMGQHBOJRASXIWPVNFTZEDY"
+        },
+        {
+            "id": 2,
+            "name": "Custom Rotor 2",
+            "wiring": "HFBYOVWMNXCISLZEDRUJTQPAGK"
+        },
+        {
+            "id": 3,
+            "name": "Custom Rotor 3",
+            "wiring": "DFKNQLWESIRUZTPXVBCGMAJYOH"
+        },
+        {
+            "id": 4,
+            "name": "Custom Rotor 4",
+            "wiring": "YSLGONJRZVHMQBEDKICATWPFXU"
+        },
+        {
+            "id": 5,
+            "name": "Custom Rotor 5",
+            "wiring": "ELSGRNVQHMBZOYKDTIWFPAXUCJ"
+        },
+        {
+            "id": 6,
+            "name": "Custom Rotor 6",
+            "wiring": "IFODAHTGYCQWJXMSUPLNZEKRBV"
+        }
+    ],
+    "reflector": "BAHKUMJCVGDTFRWSZNPLEIOYXQ",
+    "cables": [
+        [
+            "O",
+            "P"
+        ],
+        [
+            "M",
+            "I"
+        ],
+        [
+            "Q",
+            "R"
+        ],
+        [
+            "N",
+            "E"
+        ],
+        [
+            "F",
+            "C"
+        ]
+    ]
+}

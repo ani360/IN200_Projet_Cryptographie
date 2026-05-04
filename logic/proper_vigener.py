@@ -80,7 +80,7 @@ def Calcul_IC(input : str, alphabet : str, pas : int) -> int : #calcul de l'indi
 def remake_lowcase(txt1 : str, txt2 :str) -> str : #note : does not work well with french_extended bcse of accents.
     txt1_2 = ''
     for char in txt1 :
-        if char.isalpha() or char.isspace() :
+        if char.isalnum() or char.isspace() :
             txt1_2 +=char
     L=[]
     for i in range(len(txt1_2)) :
@@ -167,7 +167,7 @@ def vigenere_decode(input : str, key : str, lang : str, keep_lowercase : bool) -
             decoded = remake_lowcase(input, decoded)
         return(decoded)
 
-def vigenere_decrypt(input : int, lang : str, keep_lowercase : bool) -> str:
+def vigenere_decrypt(input : int, lang : str, keep_lowercase : bool):
     if lang == "french_extended":
         alphabet : str = LangDictJson["french"]["alphabet"]
     else :
@@ -188,7 +188,7 @@ def vigenere_decrypt(input : int, lang : str, keep_lowercase : bool) -> str:
     if keep_lowercase :
         decrypted = remake_lowcase(input, decrypted)
     
-    return(f'key = {key}, text = {decrypted}')
+    return key, decrypted
 
 if __name__ == "__main__": #DECRYPTER WON'T WORK EVERY TIME ESPECIALLY WITH LONGER KEYS OR TEXTS WITH UNEVEN LETTER DISTRIBUTION.
     #raw_texts
@@ -197,11 +197,12 @@ if __name__ == "__main__": #DECRYPTER WON'T WORK EVERY TIME ESPECIALLY WITH LONG
     frext = "Le Comte de Monte-Cristo est un roman d'Alexandre Dumas, écrit avec la collaboration d'Auguste Maquet et dont la publication commence pendant l'été 1844. Il est partiellement inspiré du récit d'un fait divers, « Le Diamant et la Vengeance » (voir Pierre Picaud), publié en 1838 dans les Mémoires tirés des archives de la police (tome V, chapitre LXXIV), mémoires apocryphes rédigés en large partie par l'écrivain Étienne-Léon de Lamothe-Langon à partir des notes de Jacques Peuchet, archiviste de la préfecture de police."
     
     #Test for lang = "french"
+    """
     FRencoded = vigenere_encode(frtxt, 'DEGAULLE', "french", True)
     print(FRencoded)
     print(vigenere_decode(FRencoded, 'DEGAULLE', "french", True))
     print(vigenere_decrypt(FRencoded, "french", True))
-    
+    """
     
     #test for lang = "english"
     """
@@ -212,10 +213,11 @@ if __name__ == "__main__": #DECRYPTER WON'T WORK EVERY TIME ESPECIALLY WITH LONG
     print(vigenere_decrypt(ENencoded, "english", True))
     """
 
-    #I advise not to use keep_lowercase = True with french_extended as it can mess things up.
+    
+    #test for french extended :
     """
-    test1 = vigenere_encode(frext, 'DEGAULLE', "french_extended", False)
+    test1 = vigenere_encode(frext, 'DEGAULLE', "french_extended", True)
     print(test1)
-    print(vigenere_decode(test1, 'DEGAULLE', "french_extended", False))
-    print(vigenere_decrypt(test1, "french_extended", False))
+    print(vigenere_decode(test1, 'DEGAULLE', "french_extended", True))
+    print(vigenere_decrypt(test1, "french_extended", True))
     """

@@ -11,7 +11,7 @@ with open(LangDict_path, 'r', encoding='utf-8') as f:
 def remake_lowcase(txt1 : str, txt2 :str) -> str : #note : does not work well with french_extended bcse of accents.
     txt1_2 = ''
     for char in txt1 :
-        if char.isalpha() or char.isspace() :
+        if char.isalnum() or char.isspace() :
             txt1_2 +=char
     L=[]
     for i in range(len(txt1_2)) :
@@ -23,19 +23,20 @@ def remake_lowcase(txt1 : str, txt2 :str) -> str : #note : does not work well wi
 
 def sanitize(input_str, alphabet_visee, garder_accents=False):
     if garder_accents:
-        result=input_str
+        result="".join(i for i in input_str if i.isalnum() or  i.isspace())
     else:
         normalized = unicodedata.normalize('NFD', input_str)
         result = "".join(char for char in normalized if unicodedata.category(char) != 'Mn')
     final_list_char = []
     resultat_temporaire=result.upper()
     for char in resultat_temporaire:
-        if char in alphabet_visee or char.isspace():
+        if char in alphabet_visee or char.isspace() or char.isnumeric() :
             final_list_char.append(char)
     return "".join(final_list_char)
 
 
-def caesar(message, cle, alphabet,garder_minuscules=False, garder_accents=False):
+def caesar(message, cle, langue,garder_minuscules=False, garder_accents=False):
+    alphabet = LangDictJson[langue]["alphabet"]
     message_original=message
     message_de_travail=sanitize(message,alphabet,garder_accents)
     message_chiffre = ""
@@ -86,7 +87,8 @@ def brute_force(message, alphabet,garder_minuscules=False,garder_accents=False):
         scores[cle_test] = round(diff, 2)
     return scores
 """
-def decrypt_freq(message, langue,garder_accents=False):
+
+def decrypt_freq(message, langue,garder_accents=False, garder_minuscules=False):
     alphabet = LangDictJson[langue]['alphabet']
     dict_freq_json = LangDictJson[langue]['PP']
     message_propre = sanitize(message,alphabet,garder_accents)
@@ -95,28 +97,36 @@ def decrypt_freq(message, langue,garder_accents=False):
         return 0
     score = [0, 500]
     for cle_test in range(len(alphabet)):
-        test = caesar(message_propre, -cle_test, alphabet, False, garder_accents)
+        test = caesar(message_propre, -cle_test, langue, garder_minuscules, garder_accents)
         diff = sum(abs(b - dict_freq_json[a]) for a, b in enumerate([100 * test.count(lettre) / l for lettre in alphabet]))
         if diff < score[1]:
             score = [cle_test, diff]
-    return score[0]
+    message = caesar(message, -score[0], langue, garder_minuscules, garder_accents)
+    return score[0], message
 
 
 
 if __name__ == "__main__":
-    message_test = "C'est l'été !"
-    alphabet_ext = LangDictJson["french_extended"]["alphabet"]
+    txt = "Le but de ce projet est de programmer des algorithmes de chiffrements utilises avant l’utilisation d’algorithmes modernes, mais surtout de programmer des algorithmes capables de casser ces chiffrements anciens."
+    res1 = caesar(txt, 6, "french_extended", True, True)
+    print(res1)
+    print(decrypt_freq(res1, "french_extended", True, True))
+
+    """message_test = "C'est l'été !"
+    lang = "french_extended"
 
     print("on garde tout")
-    res1 = caesar(message_test, 3, alphabet_ext, garder_minuscules=True, garder_accents=True)
+    res1 = caesar(message_test, 3, lang, garder_minuscules=True, garder_accents=True)
+    print("Resultat:", res1)
+    res1 = caesar(res1, -3, lang, garder_minuscules=True, garder_accents=True)
     print("Resultat:", res1)
 
     print("majuscule+accents")
-    res2 = caesar(message_test, 3, alphabet_ext, garder_minuscules=False, garder_accents=True)
+    res2 = caesar(message_test, 3, lang, garder_minuscules=False, garder_accents=True)
     print("Resultat:", res2)
 
     print("sans accents et majuscules")
-    res3 = caesar(message_test, 3, alphabet_ext, garder_minuscules=False, garder_accents=False)
-    print("Resultat:", res3)
+    res3 = caesar(message_test, 3, lang, garder_minuscules=False, garder_accents=False)
+    print("Resultat:", res3)"""
    
     
